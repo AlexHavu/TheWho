@@ -1,0 +1,39 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\Tipalti.TheWho.xml</DocumentationFile>
+     <NoWarn>1701;1702;1591</NoWarn>
+     <AnalysisLevel>latest</AnalysisLevel>
+  </PropertyGroup>
+  
+  
+  <ItemGroup>
+    <PackageReference Include="AspNetCore.HealthChecks.Redis" Version="3.1.2" />
+    <PackageReference Include="AspNetCore.HealthChecks.UI" Version="3.1.0" />
+    <PackageReference Include="AWSSDK.Core" Version="3.3.106.4" />
+    <PackageReference Include="AWSSDK.Extensions.NETCore.Setup" Version="3.3.101" />
+    <PackageReference Include="AWSSDK.KeyManagementService" Version="3.3.105.28" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.9" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="3.1.9" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="3.1.9" />
+    <PackageReference Include="Serilog" Version="2.9.0" />
+    <PackageReference Include="Serilog.AspNetCore" Version="3.2.0" />
+    <PackageReference Include="Serilog.Settings.Configuration" Version="3.1.0" />
+    <PackageReference Include="Serilog.Sinks.File" Version="4.1.0" />
+    <PackageReference Include="Tipalti.Configuration.Quartz" Version="1.0.227492" />
+    <PackageReference Include="Tipalti.Configuration.Startup" Version="3.0.229620" />
+    <PackageReference Include="Tipalti.ExceptionHandler" Version="1.0.221277" />
+    <PackageReference Include="Tipalti.Redis" Version="1.2.118677" />
+    <PackageReference Include="Tipalti.Telemetry" Version="1.0.229491" />
+    <PackageReference Include="TipaltiCoreLogger" Version="1.1.83660" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Models\" />
+  </ItemGroup>
+
+</Project>

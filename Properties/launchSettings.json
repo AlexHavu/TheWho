@@ -1,0 +1,23 @@
+{
+  "iisSettings": {
+    "windowsAuthentication": false,
+    "anonymousAuthentication": true,
+    "iisExpress": {
+      "applicationUrl": "http://localhost:54138",
+      "sslPort": 44305
+    }
+  },
+  "$schema": "http://json.schemastore.org/launchsettings.json",
+  "profiles": {
+    "Tipalti.TheWho": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "launchUrl": "swagger",
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "development",
+        "ASPNETCORE_ENVIRONMENT": "development"
+      },
+      "applicationUrl": "http://localhost:5000"
+    }
+  }
+}
