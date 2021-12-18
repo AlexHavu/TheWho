@@ -11,5 +11,7 @@ namespace Tipalti.TheWho.Dal.Sql
     }
     public class DbTheWhoRepository : IDbTheWhoRepository
     {
+
+       
     }
 }

@@ -6,17 +6,18 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Swashbuckle.AspNetCore.Annotations;
 using Tipalti.TheWho.Logger;
+using Tipalti.TheWho.Services;
 
 namespace Tipalti.TheWho.Controllers.V1
 {
     [Produces("application/json")]
     [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
-    [Authorize]
     [ApiVersion("1.0")]
     [SwaggerTag("Values service API")]
-    public class ValuesController : ControllerBase
+    public class TheWhoController : ControllerBase
     {
+        private SearchService _searchService;
         private readonly ILogger _logger;
 
         //this list is only for demonstrating CRUD methods and how to document API
@@ -25,8 +26,9 @@ namespace Tipalti.TheWho.Controllers.V1
             1,3,5,8,10
         };
 
-        public ValuesController(ILogger<ITheWhoLogger> logger)
+        public TheWhoController(ILogger<ITheWhoLogger> logger, ISearchService searchService)
         {
+            _searchService = (SearchService)searchService;
             _logger = logger;
         }
 
@@ -53,16 +55,10 @@ namespace Tipalti.TheWho.Controllers.V1
         [HttpGet("{id}")]
         [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(void), StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<int>> GetByIdAsync(int id)
+        public async Task<ActionResult<int>> GetByIdAsync(string id)
         {
-            _logger.LogDebug("Values - Get By id");
-            if (! Values.Contains(id))
-            {
-                _logger.LogInformation("No value found in API call.");
-                return NotFound();
-            }
-             
-            return await Task.FromResult(id);
+            _searchService.SearchResults(id);
+            return 1;
 
         }
 

@@ -6,7 +6,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Tipalti.Configuration.Startup;
-
+using Tipalti.TheWho.Dal.Elastic;
+using Tipalti.TheWho.Services;
 
 namespace Tipalti.TheWho.Dal.Sql
 {
@@ -32,6 +33,8 @@ namespace Tipalti.TheWho.Dal.Sql
             services.AddScoped<IDbTheWhoContext>(serviceProvider => serviceProvider.GetService<DbTheWhoContext>());
             services.AddScoped<IReadOnlyDbTheWhoContext>(serviceProvider => serviceProvider.GetService<ReadOnlyDbTheWhoContext>());
             services.AddScoped<IDbTheWhoRepository, DbTheWhoRepository>();
+            services.AddScoped<IDbElasticTheWhoRepository, DbElasticTheWhoRepository>();
+            services.AddScoped<ISearchService, SearchService>();
         }
     }
 }
