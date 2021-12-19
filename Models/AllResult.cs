@@ -15,7 +15,7 @@ namespace Tipalti.TheWho.Models
         public eRecourseType RecourseType { get; set; }
         public List<string> Domains { get; set; }
         public string Link { get; set; }
-
+        public string Jira { get; set; }
 
         public string Confluence { get; set; }
       
