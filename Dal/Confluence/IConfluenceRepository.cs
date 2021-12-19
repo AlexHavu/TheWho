@@ -10,5 +10,6 @@ namespace Tipalti.TheWho.Dal.Confluence
     public interface IConfluenceRepository
     {
         Task<Result<IEnumerable<ResourceDocumentResult>>> GetPagesAsync(IEnumerable<string> spaces, IEnumerable<string> domains);
+        Task<Result<IEnumerable<ServiceDocument>>> GetServicesAsync(string servicesRootId);
     }
 }

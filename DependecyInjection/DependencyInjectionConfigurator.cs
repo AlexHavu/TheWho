@@ -14,6 +14,7 @@ namespace Tipalti.TheWho
             services.AddRedisTheWhoRepository();
             services.AddConfluenceHttpClient(configuration, logger);
             services.AddScoped<IConfluenceIndexer, ConfluenceIndexer>();
+            services.AddScoped<IServiceIndexer, ServiceIndexer>();
         }
     }
 }
