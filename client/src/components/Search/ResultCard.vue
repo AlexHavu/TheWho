@@ -12,6 +12,7 @@
       </div>
       <div class="button-panel">
           <v-btn
+          v-if="!isService"
           icon
           @click="handleClick"
           >
@@ -74,7 +75,11 @@ export default {
   },
   methods: {
     handleClick() {
-      this.$emit('search', { searchValue: this.searchValue });
+      if (this.isTeam) {
+        this.$router.push({ path: `/resource/${this.data.Id}` });
+      } else {
+        window.open(this.data.Link);
+      }
     },
   },
 };

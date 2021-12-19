@@ -12,12 +12,12 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state() {
     return {
-      searchResult: {},
+      searchResult: [],
     };
   },
   mutations: {
     [SET_SERACH_RESULT](state, payload) {
-      Object.assign(state.searchResult, payload);
+      state.searchResult = payload;
     },
   },
   actions: {
@@ -33,7 +33,7 @@ export default new Vuex.Store({
       return apiPayload;
     },
     dataById(state, id) {
-      return state.state.searchResult[id];
+      return state.state.searchResult.filter((x) => x.Id.toString() === id)[0];
     },
   },
   modules: {

@@ -29,13 +29,10 @@ export default {
     };
   },
   async mounted() {
-    await this.search();
     this.resource = await this.dataById(this.id);
-    console.log(this.resource);
   },
   methods: {
     ...mapActions({
-      search: 'search',
       dataById: 'dataById',
     }),
   },

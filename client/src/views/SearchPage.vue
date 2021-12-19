@@ -1,7 +1,7 @@
 <template>
   <div class="search-page">
       <div class="search-area">
-        <search-field></search-field>
+        <search-field @search="handleSearch"></search-field>
       </div>
       <div class="results-area">
         <div class="filter-area">
@@ -15,6 +15,7 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex';
 import SearchField from '@/components/Search/SearchField.vue';
 import ResultCard from '@/components/Search/ResultCard.vue';
 import FilterResults from '@/components/Search/Filter.vue';
@@ -38,10 +39,12 @@ export default {
     handleFilter(type) {
       this.searchResult = this.allSearchResult.filter((x) => x.DocumentType === type);
     },
-  },
-  mounted() {
-    this.searchResult = this.allSearchResult;
-    this.documentTypes = this.allSearchResult.map((x) => x.DocumentType);
+    async handleSearch({ searchValue }) {
+      this.searchResult = await this.search(searchValue);
+    },
+    ...mapActions({
+      search: 'search',
+    }),
   },
 };
 </script>
