@@ -42,7 +42,10 @@ namespace Tipalti.TheWho
             ILogger logger = new SerilogLoggerProvider(StartupDefaults.CreateStartupLogger())
 #pragma warning restore CA2000 // Dispose objects before losing scope
                                     .CreateLogger(nameof(Program));
-
+            services.AddCors(options => options.AddPolicy("ApiCorsPolicy", builder =>
+            {
+                builder.WithOrigins("http://localhost:5000/api/Products/v1").AllowAnyMethod().AllowAnyHeader();
+            }));
             logger.LogInformation("Startup ConfigureServices");
 
             services.AddExceptionHandling(_configuration);
@@ -89,6 +92,10 @@ namespace Tipalti.TheWho
             IServiceProvider serviceProvider
             )
         {
+            app.UseCors(builder => builder
+        .AllowAnyOrigin()
+        .AllowAnyMethod()
+        .AllowAnyHeader());
             if (env is null)
             {
                 throw new ArgumentNullException(nameof(env));
