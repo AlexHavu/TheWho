@@ -11,5 +11,6 @@ namespace Tipalti.TheWho.Dal.Elastic
         public List<ResourceDocument> GetResourceDocumentsByDomain(int domainId);
         public void DeleteDocument<TDocument>(Id id) where TDocument : class;
         public void BulkAddOrUpdate<TDocument>(List<TDocument> document) where TDocument : class;
+        public List<TeamDocument> GetTeams();
     }
 }
