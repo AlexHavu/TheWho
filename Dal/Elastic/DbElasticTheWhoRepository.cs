@@ -132,5 +132,10 @@ namespace Tipalti.TheWho.Dal.Elastic
         {
             throw new NotImplementedException();
         }
+
+        public List<string> GetSpacesKeys()
+        {
+            return GetDocumentById<SpacesDocument>(1)?.Spaces;
+        }
     }
 }
