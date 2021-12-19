@@ -4,10 +4,10 @@
         <search-field></search-field>
       </div>
       <div class="results-area">
-        <div class="filter-area"></div>
+        <div class="filter-area">
+          <filter-results/>
+        </div>
         <div class="results">
-          <result-card></result-card>
-          <result-card></result-card>
           <result-card></result-card>
           <result-card></result-card>
           <result-card></result-card>
@@ -23,16 +23,17 @@
 <script>
 import SearchField from '@/components/Search/SearchField.vue';
 import ResultCard from '@/components/Search/ResultCard.vue';
+import FilterResults from '@/components/Search/Filter.vue';
 
 export default {
   name: 'SearchPage',
   components: {
     SearchField,
     ResultCard,
+    FilterResults,
   },
 };
 </script>
-    ResultCard
 
 <style scoped>
   .search-page{
@@ -49,17 +50,21 @@ export default {
     height: 15%;
     align-items: center;
     justify-content: center;
+    border-bottom: 1px solid rgba(220, 220, 220, 0.5);
   }
   .results-area{
     width: 100%;
     height: 85%;
-    background-color: green;
     display: flex;
   }
   .filter-area{
     width: 20%;
     height: 100%;
-    background-color: blue;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-right: 1px solid rgba(220, 220, 220, 0.5);
+
   }
   .results{
     width: 80%;

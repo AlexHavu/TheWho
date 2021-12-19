@@ -1,15 +1,19 @@
 <template>
   <v-card class="card" elevation="2" outlined>
-      <acount-icon class="icon" v-if="false"/>
+      <lan-icon class="icon" v-if="true"/>
       <folder-icon class="icon" v-if="false"/>
-      <acount-group-icon class="icon" v-if="true"/>
+      <acount-group-icon class="icon" v-if="false"/>
       <div class="team-user-info">
             <h2 class="title">Sharon Geller</h2>
-            <p>{{getBottomText}}</p>
+            <p>{{getOwnerText}}</p>
+      </div>
+      <div class="disciption-panel">
+          hi
       </div>
       <div class="button-panel">
           <v-btn
           icon
+          @click="handleClick"
           >
           <arrow-right-icon/>
           </v-btn>
@@ -19,14 +23,14 @@
 
 <script>
 import AcountGroupIcon from 'vue-material-design-icons/AccountGroup.vue';
-import AcountIcon from 'vue-material-design-icons/Account.vue';
+import LanIcon from 'vue-material-design-icons/Lan.vue';
 import FolderIcon from 'vue-material-design-icons/Folder.vue';
 import ArrowRightIcon from 'vue-material-design-icons/ArrowRight.vue';
 
 export default {
   name: 'ResultCard',
   components: {
-    AcountIcon,
+    LanIcon,
     FolderIcon,
     AcountGroupIcon,
     ArrowRightIcon,
@@ -40,7 +44,7 @@ export default {
     };
   },
   computed: {
-    getBottomText() {
+    getOwnerText() {
       return 'Manger: placeholder';
     },
   },
@@ -83,5 +87,14 @@ export default {
     flex-direction: row-reverse;
     flex-grow : 1;
     margin-right: 1%;
+}
+.disciption-panel{
+    display: flex;
+    flex-direction: row;
+    flex-grow : 1;
+    margin-right: 1%;
+    height: 60%;
+    display: flex;
+    align-items: center;
 }
 </style>
