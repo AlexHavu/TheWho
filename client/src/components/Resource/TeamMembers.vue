@@ -9,7 +9,8 @@
       </div>
       <div v-for="teamMember in teamMembers" :key="teamMember.link" class="member">
         <img class="member-icon" src="@/assets/person.png" />
-        <div>{{ teamMember.name }}</div>
+        <div>{{ teamMember.Name }}</div>
+        <div class="leader-description">{{ teamMember.Title }}</div>
       </div>
     </div>
   </div>

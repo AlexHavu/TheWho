@@ -1,17 +1,12 @@
 <template>
   <div class="hello">
     <team-members
-    :teamName="'Contigos'"
-    :teamLeader="'Yehiel Dahan'"
-    :teamMembers="[{ name: 'Eli Broide'}, { name: 'Eylon Basirtman'},
-    { name: 'Mor Cohen'}, { name: 'Mila Brooks'}, { name: 'Sharon Geller'}]"/>
-    <quick-links :slack="'https://tipalti.slack.com/'" :jira="'https://tipalti.slack.com/'" :confluence="'https://tipalti.slack.com/'"/>
-    <services :services="[{ title: 'Approval rules' },
-    { title: 'Bills' },
-    { title: 'Contigos' },
-    { title: 'Approval rules 2' }, { title: 'Bills 2' }, { title: 'Contigos 2' },
-    { title: 'Approval rules 3' }, { title: 'Bills 3' }, { title: 'Contigos 3' }]"/>
-    <domains :domains="[{ title: 'Approval domain' }, { title: 'food domain' }]"/>
+    :teamName="resource.Name"
+    :teamLeader="resource.TeamLeader.Name"
+    :teamMembers="resource.TeamMembers"/>
+    <quick-links :slack="resource.Slack" :jira="resource.Jira" :confluence="resource.Confluence"/>
+    <services :services="resource.Services"/>
+    <domains :domains="resource.Domains"/>
   </div>
 </template>
 
@@ -20,6 +15,7 @@ import QuickLinks from '../components/Resource/QuickLinks.vue';
 import TeamMembers from '../components/Resource/TeamMembers.vue';
 import Services from '../components/Resource/Services.vue';
 import Domains from '../components/Resource/Domains.vue';
+import resourceJson from '@/assets/resource.json';
 
 export default {
   components: {
@@ -28,6 +24,11 @@ export default {
   name: 'Resource',
   props: {
     msg: String,
+  },
+  data() {
+    return {
+      resource: resourceJson,
+    };
   },
 };
 </script>
