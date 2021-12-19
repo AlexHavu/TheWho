@@ -62,23 +62,10 @@ namespace Tipalti.TheWho.Dal.Elastic
 
         public static string GetIndexName(Type type)
         {
-            string indexName = ((IndexNameAttribute)Attribute.GetCustomAttribute(type, typeof(IndexNameAttribute)))?.IndexName;
+            string indexName = ((IndexNameAttribute) Attribute.GetCustomAttribute(type, typeof(IndexNameAttribute)))?.IndexName;
             return indexName ?? ElasticSearchClient.DefaultIndex;
         }
 
-        public void CreateRecourseIndexAndMapping()
-        {
-            var createIndexResponse = _elasticSearchClient.Indices.Create(GetIndexName(typeof(ResourceDocumentResult)), c => c
-                .Map<ResourceDocumentResult>(m => m
-                    .AutoMap()
-                    .Properties(ps => ps
-                        .Nested<DomainModel>(n => n
-                            .Name(nn => nn.Domains)
-                        )
-                    )
-                )
-            );
-        }
         public void DeleteIndex(string indexName)
         {
             var response = _elasticSearchClient.Indices.DeleteAsync(indexName);
