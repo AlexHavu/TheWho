@@ -99,63 +99,13 @@ namespace Tipalti.TheWho.Dal.Elastic
             );
         }
 
-        //add async and error handling
-        //============================
-        //var indexManyResponse = client.IndexMany(people);
-        //if (indexManyResponse.Errors)
-        //{
-        //    // the response can be inspected for errors
-        //    foreach (var itemWithError in indexManyResponse.ItemsWithErrors)
-        //    {
-        //        // if there are errors, they can be enumerated and inspected
-        //        Console.WriteLine("Failed to index document {0}: {1}",
-        //            itemWithError.Id, itemWithError.Error);
-        //    }
-        //}
-        //// alternatively, documents can be indexed asynchronously
-        //var indexManyAsyncResponse = await client
-        //public void CreateMapping()
-        //{
-        //    var createIndexResponse = _elasticSearchClient.Indices.Create("test11", c => c
-        //        .Map<RecourseDocument>(m => m
-        //            .Properties(ps => ps
-        //                .Text(s => s
-        //                    .Name(n => n.Title))
-        //                    .Number(s => s
-        //                        .Name(n => n.RecourseType))
-        //                .Number(s => s
-        //                    .Name(n => n.Link)
-        //                )
-        //                .Object<Employee>(o => o
-        //                    .Name(n => n.Employees)
-        //                    .Properties(eps => eps
-        //                        .Text(s => s
-        //                            .Name(e => e.FirstName)
-        //                        )
-        //                        .Text(s => s
-        //                            .Name(e => e.LastName)
-        //                        )
-        //                        .Number(n => n
-        //                            .Name(e => e.Salary)
-        //                            .Type(NumberType.Integer)
-        //                        )
-        //                    )
-        //                )
-        //            )
-        //        )
-        //    );
-
-
-        //var createIndexResponse = _elasticSearchClient.Indices.Create("recourse", c => c
-        //    .Map<RecourseDocument>(m => m
-        //        .AutoMap()
-        //        .Properties(ps => ps
-        //            .Nested<DomainModel>(n => n
-        //                .Name(nn => nn.Domains)
-        //            )
-        //        )
-        //    )
-        //);
-        //   }
+        public void CreateTeamConfigurationDocument()
+        {
+            var createIndexResponse = _elasticSearchClient.Indices.Create(GetIndexName(typeof(TeamConfigurationDocument)), c => c
+                .Map<TeamConfigurationDocument>(m => m
+                    .AutoMap()
+                )
+            );
+        }
     }
 }
