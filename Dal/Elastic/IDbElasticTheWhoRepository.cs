@@ -16,6 +16,6 @@ namespace Tipalti.TheWho.Dal.Elastic
         public TeamDocument GetTeamConfiguartion(int domainId);
         public void DeleteDocument<TDocument>(Id id) where TDocument : class;
         public void BulkAddOrUpdate<TDocument>(List<TDocument> document) where TDocument : class;
-        public Dictionary<string, Tipalti.TheWho.Models.TeamDocument> GetTeams();
+        public Dictionary<string, TeamConfigurationDocument> GetTeams();
     }
 }

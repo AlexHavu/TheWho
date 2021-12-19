@@ -30,6 +30,7 @@
     <PackageReference Include="Tipalti.ExceptionHandler" Version="1.0.221277" />
     <PackageReference Include="Tipalti.Redis" Version="1.2.118677" />
     <PackageReference Include="Tipalti.Telemetry" Version="1.0.229491" />
+    <PackageReference Include="Tipalti.Utils" Version="2.0.226631" />
     <PackageReference Include="TipaltiCoreLogger" Version="1.1.83660" />
   </ItemGroup>
 

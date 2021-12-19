@@ -2,7 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Tipalti.TheWho.Dal.Sql;
-
+using Tipalti.TheWho.Indexers;
 
 namespace Tipalti.TheWho
 {
@@ -12,6 +12,8 @@ namespace Tipalti.TheWho
         {
             services.AddDbTheWhoRepository(configuration, logger);
             services.AddRedisTheWhoRepository();
+            services.AddConfluenceHttpClient(configuration, logger);
+            services.AddScoped<IConfluenceIndexer, ConfluenceIndexer>();
         }
     }
 }
