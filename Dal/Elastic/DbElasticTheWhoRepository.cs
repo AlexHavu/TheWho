@@ -34,11 +34,6 @@ namespace Tipalti.TheWho.Dal.Elastic
             }
         }
 
-        Dictionary<string, TeamDocument> IDbElasticTheWhoRepository.GetTeams()
-        {
-            throw new NotImplementedException();
-        }
-
         public TDocument GetDocumentById<TDocument>(Id id) where TDocument : class
         {
             GetResponse<TDocument> getResponse = _elasticSearchClient.Get<TDocument>(id, x => x
