@@ -35,6 +35,10 @@
 
   <ItemGroup>
     <Folder Include="Models\" />
+    <Folder Include="ElasticClient\" />
+    <Folder Include="Documents\" />
+    <Folder Include="Enums\" />
+    <Folder Include="Repository\" />
   </ItemGroup>
 
 </Project>
