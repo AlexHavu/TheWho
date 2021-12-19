@@ -13,6 +13,7 @@
           src="@/assets/TheWhoLogo.png"
           transition="scale-transition"
           width="40"
+          @click="handleClick"
         />
         <h1>The-Who</h1>
       </div>
@@ -30,6 +31,11 @@
 
 export default {
   name: 'App',
+  methods: {
+    handleClick() {
+      this.$router.push({ path: '/' });
+    },
+  },
 };
 </script>
 

@@ -41,18 +41,17 @@ namespace Tipalti.TheWho.Dal.Elastic
             return getResponse?.Source;
         }
 
-        public List<Documents.ResourceDocumentResult> GetResourceDocumentsByDomain(string domainId)
+        public List<ResourceDocument> GetResourceDocumentsByDomain(string domain)
         {
-            ISearchResponse<Documents.ResourceDocumentResult> searchResult = _elasticSearchClient.Search<Documents.ResourceDocumentResult>(s => s
-                .Index(GetIndexName(typeof(Documents.ResourceDocumentResult)))
-                .Query(q => q
-                    .Match(m => m
-                        .Field("domains.domainId")
-                        .Query(domainId.ToString())
-                    )
-                )
+
+            var searchResults = _elasticSearchClient.Search<ResourceDocument>(s => s
+                .Index(GetIndexName(typeof(ResourceDocument)))
+                .Query(q => q.QueryString(qs => qs.Query(domain)))
+                .Sort(st => st.Descending("_score"))
+                .From(0)
+                .Size(500)
             );
-            return searchResult?.Documents?.ToList();
+            return searchResults?.Documents?.ToList();
         }
 
         public List<ServiceDocument> GetServiceByOwner(string serviceName)
@@ -67,7 +66,7 @@ namespace Tipalti.TheWho.Dal.Elastic
 
         public static string GetIndexName(Type type)
         {
-            string indexName = ((IndexNameAttribute) Attribute.GetCustomAttribute(type, typeof(IndexNameAttribute)))?.IndexName;
+            string indexName = ((IndexNameAttribute)Attribute.GetCustomAttribute(type, typeof(IndexNameAttribute)))?.IndexName;
             return indexName ?? ElasticSearchClient.DefaultIndex;
         }
 

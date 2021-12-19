@@ -11,5 +11,7 @@ namespace Tipalti.TheWho.Dal.Elastic.Documents
         public int TeamLeaderId { get; set; }
         public int JiraBoardId { get; set; }
         public List<string> Domains { get; set; }
+        public string TeamSpace { get; set; }
+        public string JiraBoardLink { get; set; }
     }
 }

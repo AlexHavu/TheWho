@@ -41,14 +41,14 @@ namespace Tipalti.TheWho.Dal.Confluence
             _teamNames = _indexerUtils.GetTeamNames();
         }
 
-        public async Task<Result<IEnumerable<ResourceDocumentResult>>> GetPagesAsync(IEnumerable<string> spaces, IEnumerable<string> domains)
+        public async Task<Result<IEnumerable<ResourceDocument>>> GetPagesAsync(IEnumerable<string> spaces, IEnumerable<string> domains)
         {
             string spacesExpression = buildSpacesExpression(spaces);
             string textExpression = buildDomainsExpression(domains);
             int totalPages = 0;
             int totalSize;
 
-            var results = new List<ResourceDocumentResult>();
+            var results = new List<ResourceDocument>();
             do
             {
                 Result<Response> result = await GetPages(spacesExpression, textExpression, totalPages);
@@ -61,16 +61,16 @@ namespace Tipalti.TheWho.Dal.Confluence
                 }
                 else
                 {
-                    return Result<IEnumerable<ResourceDocumentResult>>.CreateFailResult(result.FailureReason);
+                    return Result<IEnumerable<ResourceDocument>>.CreateFailResult(result.FailureReason);
                 }
             }
             while (totalPages < totalSize);
-            return Result<IEnumerable<ResourceDocumentResult>>.CreateSuccessResult(results);
+            return Result<IEnumerable<ResourceDocument>>.CreateSuccessResult(results);
         }
 
-        private ResourceDocumentResult ConvertToModel(ConfluenceResult confluenceResult)
+        private ResourceDocument ConvertToModel(ConfluenceResult confluenceResult)
         {
-            return new ResourceDocumentResult
+            return new ResourceDocument
             {
                 Id = confluenceResult.Id,
                 RecourseType = (int)eRecourseType.Confluence,

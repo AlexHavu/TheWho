@@ -10,7 +10,6 @@ namespace Tipalti.TheWho.Dal.Elastic.Documents
         public string Confluence { get; set; }
         public string Jira { get; set; }
         public string TeamName { get; set; }
-        public List<string> Services { get; set; }
         public string Slack { get; set; }
         public TeamMemberModel TeamLeader { get; set; }
         public List<TeamMemberModel> TeamMembers { get; set; }

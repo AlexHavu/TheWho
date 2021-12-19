@@ -12,6 +12,7 @@
       </div>
       <div class="button-panel">
           <v-btn
+          v-if="!isService"
           icon
           @click="handleClick"
           >
@@ -45,36 +46,40 @@ export default {
   },
   computed: {
     getTitle() {
-      if (this.data.DocumentType === 1) {
-        return this.data.Title;
+      if (this.data.documentType === 1) {
+        return this.data.title;
       }
-      return this.data.Name;
+      return this.data.name;
     },
     getOwnerText() {
-      if (this.data.DocumentType === 3) {
-        return `Manger: ${this.data.TeamLeader.Name}`;
+      if (this.data.documentType === 3) {
+        return `Manger: ${this.data.teamLeader?.name}`;
       }
-      if (this.data.DocumentType === 4) {
-        return `Owner: ${this.data.Owner.Name}`;
+      if (this.data.documentType === 4) {
+        return `Owner: ${this.data.owner?.name}`;
       }
       return '';
     },
     getDescription() {
-      if (this.data.Description) {
-        return this.data.Description;
+      if (this.data.description) {
+        return this.data.description;
       }
       return '';
     },
     isTeam() {
-      return this.data.DocumentType === 3;
+      return this.data.documentType === 3;
     },
     isService() {
-      return this.data.DocumentType === 4;
+      return this.data.documentType === 4;
     },
   },
   methods: {
     handleClick() {
-      this.$emit('search', { searchValue: this.searchValue });
+      if (this.isTeam) {
+        this.$router.push({ path: `/resource/${this.data.id}` });
+      } else {
+        window.open(this.data.link);
+      }
     },
   },
 };

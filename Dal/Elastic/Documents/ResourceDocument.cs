@@ -3,7 +3,7 @@
 namespace Tipalti.TheWho.Dal.Elastic.Documents
 {
     [IndexName("the-who-resource")]
-    public class ResourceDocumentResult
+    public class ResourceDocument
     {
         public int Id { get; set; }
         public string Title { get; set; }

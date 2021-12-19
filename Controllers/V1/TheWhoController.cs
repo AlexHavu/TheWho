@@ -25,6 +25,7 @@ namespace Tipalti.TheWho.Controllers.V1
         private readonly ILogger _logger;
         private readonly IIndexerUtils _utils;
         private readonly IConfluenceIndexer _confIndexer;
+        private readonly IJiraIndexer _jiraIndexer;
         private readonly IServiceIndexer _serviceIndexer;
         private readonly ITeamIndexer _teamIndexer;
         private readonly IWebHostEnvironment _hostEnvironment;
@@ -37,12 +38,13 @@ namespace Tipalti.TheWho.Controllers.V1
 
         public TheWhoController(ILogger<ITheWhoLogger> logger, ISearchService searchService,
             IIndexerUtils utils, IConfluenceIndexer confIndexer, IServiceIndexer serviceIndexer,
-            ITeamIndexer teamIndexer, IWebHostEnvironment environment)
+            ITeamIndexer teamIndexer, IWebHostEnvironment environment, IJiraIndexer jiraIndexer)
         {
             _searchService = (SearchService)searchService;
             _logger = logger;
             _utils = utils;
             _confIndexer = confIndexer;
+            _jiraIndexer = jiraIndexer;
             _serviceIndexer = serviceIndexer;
             _teamIndexer = teamIndexer;
             _hostEnvironment = environment;
@@ -81,14 +83,12 @@ namespace Tipalti.TheWho.Controllers.V1
         /// <returns>A value with specified id</returns>
         /// <response code="200">Returns the value with the specified id</response>
         /// <response code="404">No value was found with the specified id</response>
-        [HttpGet("{id}")]
-        [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(void), StatusCodes.Status404NotFound)]
-        [HttpGet("GetByIdAsync")]
-        public async Task<ActionResult<int>> GetByIdAsync(string search)
+        [HttpGet("Search")]
+        public List<AllResult> Search(string search)
         {
-            _searchService.SearchResults(search);
-            return 1;
+            return _searchService.SearchResults(search);
+
 
         }
 
@@ -140,6 +140,14 @@ namespace Tipalti.TheWho.Controllers.V1
         public async Task RunConfluenceIndexer()
         {
             await _confIndexer.RunAsync();            
+        }
+
+        [ProducesResponseType(typeof(int), StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [HttpPost("RunJiraIndexer")]
+        public async Task RunJiraIndexer()
+        {
+            await _jiraIndexer.RunAsync();
         }
 
         [ProducesResponseType(typeof(int), StatusCodes.Status201Created)]
