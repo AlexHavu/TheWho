@@ -35,6 +35,7 @@ namespace Tipalti.TheWho.Dal.Sql
             services.AddScoped<IDbTheWhoRepository, DbTheWhoRepository>();
             services.AddScoped<IDbElasticTheWhoRepository, DbElasticTheWhoRepository>();
             services.AddScoped<ISearchService, SearchService>();
+            services.AddScoped<IIndexerUtils, IndexerUtils>();
         }
     }
 }
