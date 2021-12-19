@@ -17,12 +17,12 @@ namespace Tipalti.TheWho.Services
         {
             _elasticDB = (DbElasticTheWhoRepository)dbMongoTheWhoRepository;
         }
-        public List<BaseSearchResult> SearchResults(string search)
+        public List<AllResult> SearchResults(string search)
         {
-            var teamConfig = _elasticDB.GetTeams().Values;
+            List<TeamConfigurationDocument> teamConfig = _elasticDB.GetTeams().Values.ToList();
             var domains = _elasticDB.GetDomains();
             var dicTeamToDomains = teamConfig.ToDictionary(i => i.TeamName, v => v.Domains);
-            List<BaseSearchResult> allResults = new List<BaseSearchResult>();
+            List<AllResult> allResults = new List<AllResult>();
 
             var isTeam = _elasticDB.GetDocumentById<TeamDocument>(search);
             if (isTeam != null)
@@ -31,33 +31,42 @@ namespace Tipalti.TheWho.Services
                 allResults.Add(BuildTeamModel(isTeam, myDomains));
                 foreach (var domain in myDomains)
                 {
-                    List<Models.ResourceDocumentResult> resourceDocumentResult = GetResources(search);
+                    List<Models.AllResult> resourceDocumentResult = GetResources(search);
                     allResults.AddRange(resourceDocumentResult);
                 }
+            }
 
-
+            else if (domains.Contains(search))
+            {
+                GetTeamByDomain(search, teamConfig);
 
             }
             return allResults;
         }
 
-        private TeamDocumentResult BuildTeamModel(TeamDocument dbTeam, List<string> domains)
+        private AllResult BuildTeamModel(TeamDocument dbTeam, List<string> domains)
         {
-            var services = _elasticDB.GetServiceByOwner(dbTeam.TeamName);
-            TeamDocumentResult teamDocumentResult = new TeamDocumentResult
+            //var services = _elasticDB.GetServiceByOwner(dbTeam.TeamName);
+            AllResult teamDocumentResult = new AllResult
             {
                 DocumentType = eDocumentType.Team,
                 Confluence = dbTeam.Confluence,
                 Name = dbTeam.TeamName,
                 Slack = dbTeam.Slack,
-                Services = services.Select(s => s.Name).ToList(),
-                TeamLeader = new Models.TeamMemberModel
-                {
-                    Name = dbTeam.TeamLeader.Name,
-                    Title = dbTeam.TeamLeader.Title,
-                    Image = dbTeam.TeamLeader.Image
-                },
-                // TeamMembers = dbTeam.TeamMembers,
+                // Services = services.Select(s => s.Name).ToList(),
+                //TeamLeader = new Models.TeamMemberModel
+                //{
+                //    Name = dbTeam.TeamLeader.Name,
+                //    Title = dbTeam.TeamLeader.Title,
+                //    Image = dbTeam.TeamLeader.Image
+                //},
+                // TeamMembers = dbTeam.TeamMembers.Select(tm=>
+                // new Models.TeamMemberModel
+                // {
+                //     Name = dbTeam.TeamLeader.Name,
+                //     Title = dbTeam.TeamLeader.Title,
+                //     Image = dbTeam.TeamLeader.Image
+                // }).ToList(),
                 Domains = domains
             };
             return teamDocumentResult;
@@ -68,9 +77,9 @@ namespace Tipalti.TheWho.Services
 
         }
 
-        private TeamDocumentResult GetTeamByDomain(string search, List<TeamConfigurationDocument> teamConfig)
+        private AllResult GetTeamByDomain(string search, List<TeamConfigurationDocument> teamConfig)
         {
-            
+
             TeamDocument myTeam = null;
             List<string> myDomain = null;
             foreach (var teamConfigItem in teamConfig)
@@ -88,16 +97,16 @@ namespace Tipalti.TheWho.Services
 
         }
 
-        private List<Models.ResourceDocumentResult> GetResources(string domainID)
+        private List<Models.AllResult> GetResources(string domainID)
         {
             var resourceModel = _elasticDB.GetResourceDocumentsByDomain(domainID);
             if (resourceModel == null)
             {
-                return new List<Models.ResourceDocumentResult>();
+                return new List<Models.AllResult>();
             }
 
-            List<Models.ResourceDocumentResult> searchRsult = resourceModel.Select(res =>
-            new Models.ResourceDocumentResult
+            List<Models.AllResult> searchRsult = resourceModel.Select(res =>
+            new Models.AllResult
             {
                 DocumentType = res.RecourseType == 1 ? eDocumentType.JiraRecourse : eDocumentType.Confluence,
                 Domains = new List<string>(),
@@ -110,6 +119,6 @@ namespace Tipalti.TheWho.Services
             return searchRsult;
         }
 
-       
+
     }
 }

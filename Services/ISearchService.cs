@@ -6,8 +6,8 @@ using Tipalti.TheWho.Models;
 
 namespace Tipalti.TheWho.Services
 {
-     public interface ISearchService
-     {
-        public List<BaseSearchResult> SearchResults(string search);
-     }
+    public interface ISearchService
+    {
+        public List<AllResult> SearchResults(string search);
+    }
 }
