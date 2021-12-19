@@ -41,10 +41,10 @@ namespace Tipalti.TheWho.Dal.Elastic
             return getResponse?.Source;
         }
 
-        public List<ResourceDocumentResult> GetResourceDocumentsByDomain(int domainId)
+        public List<Documents.ResourceDocumentResult> GetResourceDocumentsByDomain(int domainId)
         {
-            ISearchResponse<ResourceDocumentResult> searchResult = _elasticSearchClient.Search<ResourceDocumentResult>(s => s
-                .Index(GetIndexName(typeof(ResourceDocumentResult)))
+            ISearchResponse<Documents.ResourceDocumentResult> searchResult = _elasticSearchClient.Search<Documents.ResourceDocumentResult>(s => s
+                .Index(GetIndexName(typeof(Documents.ResourceDocumentResult)))
                 .Query(q => q
                     .Match(m => m
                         .Field("domains.domainId")
@@ -73,11 +73,11 @@ namespace Tipalti.TheWho.Dal.Elastic
 
         public void CreateTeamIndexAndMapping()
         {
-            var createIndexResponse = _elasticSearchClient.Indices.Create(GetIndexName(typeof(TeamDocument)), c => c
-                .Map<TeamDocument>(m => m
+            var createIndexResponse = _elasticSearchClient.Indices.Create(GetIndexName(typeof(Documents.TeamDocument)), c => c
+                .Map<Documents.TeamDocument>(m => m
                     .AutoMap()
                     .Properties(ps => ps
-                        .Nested<TeamMemberModel>(n => n
+                        .Nested<Documents.TeamMemberModel>(n => n
                             .Name(nn => nn.TeamLeader)
                         )
                     )
@@ -92,6 +92,49 @@ namespace Tipalti.TheWho.Dal.Elastic
                     .AutoMap()
                 )
             );
+        }
+
+        public Dictionary<string, Tipalti.TheWho.Models.TeamDocument> GetTeams()
+        {
+            ISearchResponse<TeamDocumentConfiguration> searchResult = _elasticSearchClient.Search<TeamDocumentConfiguration>(s => s
+                            .Index(GetIndexName(typeof(TeamDocumentConfiguration)))
+                            .Query(q => q)
+                        );
+            return searchResult?.Documents?.ToDictionary(x => x.TeamName,
+                x => new Tipalti.TheWho.Models.TeamDocument()
+                {
+                    Name = x.TeamName
+                });
+
+            /*return searchResult?.Documents?.ToDictionary(x => x.Name, 
+                x => new Tipalti.TheWho.Models.TeamDocument() {
+                Id = x.Id, Name = x.Name
+            });*/
+        }
+
+        public List<ServiceDocument> GetResourceServiceByName(string serviceName)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<TeamConfigurationDocument> GetTeamConfiguartion()
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<string> GetDomains()
+        {
+            throw new NotImplementedException();
+        }
+
+        public SpacesDocument GetSpaces()
+        {
+            throw new NotImplementedException();
+        }
+
+        public TeamDocument GetTeamConfiguartion(int domainId)
+        {
+            throw new NotImplementedException();
         }
     }
 }
