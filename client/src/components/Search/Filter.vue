@@ -1,7 +1,8 @@
 <template>
   <div class="filter-selection">
       <h1 class="title">Filter By</h1>
-      <v-btn class="card" elevation="2" outlined @click="handleClick(3)">Team</v-btn>
+      <v-btn class="card" elevation="2" outlined @click="handleClick(3)">
+        <img class="icon" src="@/assets/jira.png">Team</v-btn>
       <v-btn class="card" elevation="2" outlined  @click="handleClick(4)">Service</v-btn>
       <v-btn class="card" elevation="2" outlined @click="handleClick(2)">Jira</v-btn>
       <v-btn class="card" elevation="2" outlined @click="handleClick(1)">Confluence </v-btn>

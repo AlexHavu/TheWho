@@ -1,7 +1,9 @@
 <template>
-  <v-card class="card" elevation="2" outlined>
+  <v-card class="card" elevation="2" outlined @click="handleClick">
       <lan-icon class="icon" v-if="isService"/>
-      <folder-icon class="icon" v-if="!isTeam && !isService"/>
+      <img class="icon" src="@/assets/jira.png" v-if="isJira"/>
+      <img class="icon" src="@/assets/confluence.png" v-if="isConfluence"/>
+      <folder-icon class="icon" v-if="!isTeam && !isService && !isConfluence && !isJira"/>
       <acount-group-icon class="icon" v-if="isTeam"/>
       <div class="team-user-info">
             <h2 class="title">{{getTitle}}</h2>
@@ -14,7 +16,6 @@
           <v-btn
           v-if="!isService"
           icon
-          @click="handleClick"
           >
           <arrow-right-icon/>
           </v-btn>
@@ -72,6 +73,12 @@ export default {
     isService() {
       return this.data.documentType === 4;
     },
+    isConfluence() {
+      return this.data.documentType === 1;
+    },
+    isJira() {
+      return this.data.documentType === 2;
+    },
   },
   methods: {
     handleClick() {
@@ -110,6 +117,7 @@ export default {
 .title{
     margin-top:10%;
     color: rgb(69, 94, 163);
+    width: 1500px;
 }
 .button-panel{
     display: flex;
@@ -125,5 +133,11 @@ export default {
     height: 60%;
     display: flex;
     align-items: center;
+    font-size: 1em;
+}
+
+.icon {
+  width: 40px;
+  height: 40px;
 }
 </style>
