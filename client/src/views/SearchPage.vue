@@ -37,10 +37,11 @@ export default {
   },
   methods: {
     handleFilter(type) {
-      this.searchResult = this.allSearchResult.filter((x) => x.DocumentType === type);
+      this.searchResult = this.allSearchResult.filter((x) => x.documentType === type);
     },
     async handleSearch({ searchValue }) {
       this.searchResult = await this.search(searchValue);
+      console.log(this.searchResult);
     },
     ...mapActions({
       search: 'search',

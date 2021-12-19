@@ -4,12 +4,12 @@ using Tipalti.TheWho.Enums;
 namespace Tipalti.TheWho.Models
 { 
   
-    public class TeamDocument:BaseSearchResult
+    public class TeamDocumentResult:BaseSearchResult
     {
         public string Confluence { get; set; }
         public List<string> Domains { get; set; }
         public string Name { get; set; }
-        public List<MicroServices> Services { get; set; }
+        public List<string> Services { get; set; }
         public string Slack { get; set; }
         public TeamMemberModel TeamLeader { get; set; }
         public List<TeamMemberModel> TeamMembers { get; set; }
