@@ -15,6 +15,7 @@ namespace Tipalti.TheWho
             services.AddConfluenceHttpClient(configuration, logger);
             services.AddScoped<IConfluenceIndexer, ConfluenceIndexer>();
             services.AddScoped<IServiceIndexer, ServiceIndexer>();
+            services.AddScoped<ITeamIndexer, TeamIndexer>();
         }
     }
 }

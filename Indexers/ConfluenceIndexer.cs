@@ -23,12 +23,10 @@ namespace Tipalti.TheWho.Indexers
 
         public async Task<Result> RunAsync()
         {
-            //TODO: get list of spaces and domains from the DB
-            var domains = new string[] { "MultiFx", "MultiFx Bai" };
-
             try
             {
-                var spaces = _dbElasticTheWhoRepository.GetSpacesKeys();
+                List<string> domains = _dbElasticTheWhoRepository.GetDomains();
+                List<string> spaces = _dbElasticTheWhoRepository.GetSpacesKeys();
                 Result<IEnumerable<ResourceDocumentResult>> result = await _confluenceRepository.GetPagesAsync(spaces, domains);
                 if(!result.WasOperationSuccessful)
                 {

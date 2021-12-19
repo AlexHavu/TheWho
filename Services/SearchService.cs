@@ -47,7 +47,7 @@ namespace Tipalti.TheWho.Services
 
         private List<TeamDocument> GetTeams(int domainID)
         {
-            var resourceModel = _elasticDB.GetResourceDocumentsByDomain(domainID);
+            var resourceModel = _elasticDB.GetResourceDocumentsByDomain(domainID.ToString());
             if (resourceModel == null)
             {
                 return new List<TeamDocument>();
@@ -66,7 +66,7 @@ namespace Tipalti.TheWho.Services
 
         private List<ResourceDocumentResult> GetResources(int domainID)
         {
-            var resourceModel = _elasticDB.GetResourceDocumentsByDomain(domainID);
+            var resourceModel = _elasticDB.GetResourceDocumentsByDomain(domainID.ToString());
             if(resourceModel == null)
             {
                 return new List<ResourceDocumentResult>();
