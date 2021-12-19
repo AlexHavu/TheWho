@@ -8,6 +8,6 @@ namespace Tipalti.TheWho.Services
 {
     public interface IJiraService
     {
-        public IEnumerable<ResourceDocumentResult> GetIssuesPerTeamAsResources(int id, IEnumerable<string> Domains);
+        public IEnumerable<ResourceDocument> GetIssuesPerTeamAsResources(int id, IEnumerable<string> Domains);
     }
 }
