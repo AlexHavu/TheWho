@@ -41,7 +41,7 @@ namespace Tipalti.TheWho.Dal.Elastic
             return getResponse?.Source;
         }
 
-        public List<Documents.ResourceDocumentResult> GetResourceDocumentsByDomain(int domainId)
+        public List<Documents.ResourceDocumentResult> GetResourceDocumentsByDomain(string domainId)
         {
             ISearchResponse<Documents.ResourceDocumentResult> searchResult = _elasticSearchClient.Search<Documents.ResourceDocumentResult>(s => s
                 .Index(GetIndexName(typeof(Documents.ResourceDocumentResult)))
@@ -53,6 +53,11 @@ namespace Tipalti.TheWho.Dal.Elastic
                 )
             );
             return searchResult?.Documents?.ToList();
+        }
+
+        public List<ServiceDocument> GetServiceByOwner(string serviceName)
+        {
+            throw new NotImplementedException();
         }
 
         public void DeleteDocument<TDocument>(Id id) where TDocument : class
@@ -71,7 +76,7 @@ namespace Tipalti.TheWho.Dal.Elastic
             var response = _elasticSearchClient.Indices.DeleteAsync(indexName);
         }
 
-        public void CreateTeamIndexAndMapping()
+        public void CreateTeamIndex()
         {
             var createIndexResponse = _elasticSearchClient.Indices.Create(GetIndexName(typeof(Documents.TeamDocument)), c => c
                 .Map<Documents.TeamDocument>(m => m
@@ -108,24 +113,41 @@ namespace Tipalti.TheWho.Dal.Elastic
             throw new NotImplementedException();
         }
 
-        public List<TeamConfigurationDocument> GetTeamConfiguartion()
+        public List<TeamConfigurationDocument> GetTeamConfiguration()
         {
             throw new NotImplementedException();
         }
 
         public List<string> GetDomains()
         {
-            throw new NotImplementedException();
+            List<string> domains = new List<string>();
+            foreach (var document in GetAllDocuments<TeamConfigurationDocument>())
+            {
+                domains.AddRange(document.Domains);
+            }
+
+            return domains;
         }
 
-        public SpacesDocument GetSpaces()
+        public TeamDocument GetTeamConfiguration(int domainId)
         {
             throw new NotImplementedException();
         }
 
-        public TeamDocument GetTeamConfiguartion(int domainId)
+        public List<string> GetSpacesKeys()
         {
-            throw new NotImplementedException();
+            return GetDocumentById<SpacesDocument>(1)?.Spaces;
+        }
+
+        private List<TDocument> GetAllDocuments<TDocument>() where TDocument : class
+        {
+            var searchResponse = _elasticSearchClient.Search<TDocument>(s => s
+                .Index(GetIndexName(typeof(TDocument)))
+                .Query(q => q.MatchAll()
+                )
+            );
+
+            return searchResponse.Documents.ToList();
         }
     }
 }

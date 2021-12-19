@@ -4,8 +4,8 @@
     <div class="team-members">
       <div class="member">
         <img class="member-icon" src="@/assets/leader.png" />
-        <div class="leader">{{ teamLeader }}</div>
-        <div class="leader-description">{{ teamLeaderDescription }}</div>
+        <div class="leader">{{ teamLeader.Name }}</div>
+        <div class="leader-description">{{ teamLeader.Title }}</div>
       </div>
       <div v-for="teamMember in teamMembers" :key="teamMember.link" class="member">
         <img class="member-icon" src="@/assets/person.png" />
@@ -25,12 +25,7 @@ export default {
     default() {
       return [];
     },
-    teamLeader: String,
-  },
-  data() {
-    return {
-      teamLeaderDescription: 'Team Leader',
-    };
+    teamLeader: Object,
   },
 };
 </script>

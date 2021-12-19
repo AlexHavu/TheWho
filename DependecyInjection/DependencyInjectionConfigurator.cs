@@ -16,6 +16,7 @@ namespace Tipalti.TheWho
             services.AddScoped<IConfluenceIndexer, ConfluenceIndexer>();
             services.AddJiraHttpClient(configuration, logger);
             services.AddScoped<IJiraIndexer, JiraIndexer>();
+            services.AddScoped<IServiceIndexer, ServiceIndexer>();
         }
     }
 }

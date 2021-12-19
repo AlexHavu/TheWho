@@ -1,36 +1,41 @@
-﻿using System;
+﻿using HtmlAgilityPack;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Tipalti.TheWho.Dal.Confluence;
+using Tipalti.TheWho.Dal.Confluence.Models;
 using Tipalti.TheWho.Dal.Elastic;
 using Tipalti.TheWho.Dal.Elastic.Documents;
+using Tipalti.TheWho.Services;
 using Tipalti.Utils.Result;
 
 namespace Tipalti.TheWho.Indexers
 {
-    public class ConfluenceIndexer : IConfluenceIndexer
+    public class ServiceIndexer : IServiceIndexer
     {
         private readonly IDbElasticTheWhoRepository _dbElasticTheWhoRepository;
         private readonly IConfluenceRepository _confluenceRepository;
+        private readonly IIndexerUtils _indexerUtils;
+        private const string servicesRootPageId = "47810265";
 
-        public ConfluenceIndexer(IConfluenceRepository confluenceRepository,
-                                 IDbElasticTheWhoRepository dbElasticTheWhoRepository)
+        public ServiceIndexer(IConfluenceRepository confluenceRepository,
+                              IDbElasticTheWhoRepository dbElasticTheWhoRepository, 
+                              IIndexerUtils indexerUtils)
         {
             _confluenceRepository = confluenceRepository;
             _dbElasticTheWhoRepository = dbElasticTheWhoRepository;
+            _indexerUtils = indexerUtils;
         }
 
         public async Task<Result> RunAsync()
         {
-            //TODO: get list of spaces and domains from the DB
-            var domains = new string[] { "MultiFx", "MultiFx Bai" };
-
             try
             {
-                var spaces = _dbElasticTheWhoRepository.GetSpacesKeys();
-                Result<IEnumerable<ResourceDocumentResult>> result = await _confluenceRepository.GetPagesAsync(spaces, domains);
-                if(!result.WasOperationSuccessful)
+                Result<IEnumerable<ServiceDocument>> result = await _confluenceRepository.GetServicesAsync(servicesRootPageId);
+                if (!result.WasOperationSuccessful)
                 {
                     return Result.CreateFailResult(result.FailureReason);
                 }
@@ -39,10 +44,10 @@ namespace Tipalti.TheWho.Indexers
 
                 return Result.CreateSuccessResult();
             }
-            catch(Exception e)
+            catch (Exception e)
             {
-                return Result.CreateFailResult($"Error during ConfluenceIndexer. error:{e.Message}");
+                return Result.CreateFailResult($"Error during ServiceIndexer. error:{e.Message}");
             }
-        }
+        }        
     }
 }

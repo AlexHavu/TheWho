@@ -25,6 +25,7 @@ namespace Tipalti.TheWho.Controllers.V1
         private readonly IIndexerUtils _utils;
         private readonly IConfluenceIndexer _confIndexer;
         private readonly IJiraIndexer _jiraIndexer;
+        private readonly IServiceIndexer _serviceIndexer;
 
         //this list is only for demonstrating CRUD methods and how to document API
         private static readonly List<int> Values = new List<int>
@@ -33,13 +34,14 @@ namespace Tipalti.TheWho.Controllers.V1
         };
 
         public TheWhoController(ILogger<ITheWhoLogger> logger, ISearchService searchService,
-            IIndexerUtils utils, IConfluenceIndexer confIndexer, IJiraIndexer jiraIndexer)
+            IIndexerUtils utils, IConfluenceIndexer confIndexer, IJiraIndexer jiraIndexer, IServiceIndexer serviceIndexer)
         {
             _searchService = (SearchService)searchService;
             _logger = logger;
             _utils = utils;
             _confIndexer = confIndexer;
             _jiraIndexer = jiraIndexer;
+            _serviceIndexer = serviceIndexer;
         }
 
         /// <summary>
@@ -144,5 +146,12 @@ namespace Tipalti.TheWho.Controllers.V1
             await _jiraIndexer.RunAsync();
         }
 
+        [ProducesResponseType(typeof(int), StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [HttpPost("RunServiceIndexer")]
+        public async Task RunServiceIndexer()
+        {
+            await _serviceIndexer.RunAsync();
+        }
     }
 }

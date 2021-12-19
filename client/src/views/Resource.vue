@@ -2,7 +2,7 @@
   <div class="hello">
     <team-members
     :teamName="resource.Name"
-    :teamLeader="resource.TeamLeader.Name"
+    :teamLeader="resource.TeamLeader"
     :teamMembers="resource.TeamMembers"/>
     <quick-links :slack="resource.Slack" :jira="resource.Jira" :confluence="resource.Confluence"/>
     <services :services="resource.Services"/>
@@ -11,24 +11,30 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex';
 import QuickLinks from '../components/Resource/QuickLinks.vue';
 import TeamMembers from '../components/Resource/TeamMembers.vue';
 import Services from '../components/Resource/Services.vue';
 import Domains from '../components/Resource/Domains.vue';
-import resourceJson from '@/assets/resource.json';
 
 export default {
   components: {
     QuickLinks, TeamMembers, Services, Domains,
   },
   name: 'Resource',
-  props: {
-    msg: String,
-  },
+  props: ['id'],
   data() {
     return {
-      resource: resourceJson,
+      resource: {},
     };
+  },
+  async mounted() {
+    this.resource = await this.dataById(this.id);
+  },
+  methods: {
+    ...mapActions({
+      dataById: 'dataById',
+    }),
   },
 };
 </script>
