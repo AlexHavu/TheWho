@@ -5,7 +5,6 @@ namespace Tipalti.TheWho.Models
   
     public class TeamDocument:BaseSearchResult
     {
-      
         public string Confluence { get; set; }
         public List<string> Domains { get; set; }
         public string Name { get; set; }
