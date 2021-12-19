@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Swashbuckle.AspNetCore.Annotations;
 using Tipalti.TheWho.Dal.Elastic;
+using Tipalti.TheWho.Indexers;
 using Tipalti.TheWho.Logger;
 using Tipalti.TheWho.Models;
 using Tipalti.TheWho.Services;
@@ -22,6 +23,7 @@ namespace Tipalti.TheWho.Controllers.V1
         private SearchService _searchService;
         private readonly ILogger _logger;
         private readonly IIndexerUtils _utils;
+        private readonly IConfluenceIndexer _confIndexer;
 
         //this list is only for demonstrating CRUD methods and how to document API
         private static readonly List<int> Values = new List<int>
@@ -30,11 +32,12 @@ namespace Tipalti.TheWho.Controllers.V1
         };
 
         public TheWhoController(ILogger<ITheWhoLogger> logger, ISearchService searchService,
-            IIndexerUtils utils)
+            IIndexerUtils utils, IConfluenceIndexer confIndexer)
         {
             _searchService = (SearchService)searchService;
             _logger = logger;
             _utils = utils;
+            _confIndexer = confIndexer;
         }
 
         /// <summary>
@@ -122,5 +125,14 @@ namespace Tipalti.TheWho.Controllers.V1
 
             return await Task.FromResult(Ok());
         }
+
+        [ProducesResponseType(typeof(int), StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [HttpPost("RunConfluenceIndexer")]
+        public async Task RunConfluenceIndexer()
+        {
+            await _confIndexer.RunAsync();            
+        }
+
     }
 }
