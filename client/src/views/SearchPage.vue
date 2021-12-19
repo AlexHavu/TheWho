@@ -4,17 +4,11 @@
         <search-field></search-field>
       </div>
       <div class="results-area">
-        <div class="filter-area"></div>
+        <div class="filter-area">
+          <filter-results @filter="handleFilter"/>
+        </div>
         <div class="results">
-          <result-card></result-card>
-          <result-card></result-card>
-          <result-card></result-card>
-          <result-card></result-card>
-          <result-card></result-card>
-          <result-card></result-card>
-          <result-card></result-card>
-          <result-card></result-card>
-          <result-card></result-card>
+          <result-card v-for="result in searchResult" :key="result.id" :data="result"></result-card>
         </div>
       </div>
   </div>
@@ -23,16 +17,34 @@
 <script>
 import SearchField from '@/components/Search/SearchField.vue';
 import ResultCard from '@/components/Search/ResultCard.vue';
+import FilterResults from '@/components/Search/Filter.vue';
+import search from '@/assets/search.json';
 
 export default {
   name: 'SearchPage',
   components: {
     SearchField,
     ResultCard,
+    FilterResults,
+  },
+  data() {
+    return {
+      allSearchResult: search,
+      searchResult: [],
+      documentTypes: [],
+    };
+  },
+  methods: {
+    handleFilter(type) {
+      this.searchResult = this.allSearchResult.filter((x) => x.DocumentType === type);
+    },
+  },
+  mounted() {
+    this.searchResult = this.allSearchResult;
+    this.documentTypes = this.allSearchResult.map((x) => x.DocumentType);
   },
 };
 </script>
-    ResultCard
 
 <style scoped>
   .search-page{
@@ -49,17 +61,21 @@ export default {
     height: 15%;
     align-items: center;
     justify-content: center;
+    border-bottom: 1px solid rgba(220, 220, 220, 0.5);
   }
   .results-area{
     width: 100%;
     height: 85%;
-    background-color: green;
     display: flex;
   }
   .filter-area{
     width: 20%;
     height: 100%;
-    background-color: blue;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-right: 1px solid rgba(220, 220, 220, 0.5);
+
   }
   .results{
     width: 80%;

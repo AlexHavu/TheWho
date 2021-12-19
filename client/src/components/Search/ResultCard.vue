@@ -1,15 +1,19 @@
 <template>
   <v-card class="card" elevation="2" outlined>
-      <acount-icon class="icon" v-if="false"/>
-      <folder-icon class="icon" v-if="false"/>
-      <acount-group-icon class="icon" v-if="true"/>
+      <lan-icon class="icon" v-if="isService"/>
+      <folder-icon class="icon" v-if="!isTeam && !isService"/>
+      <acount-group-icon class="icon" v-if="isTeam"/>
       <div class="team-user-info">
-            <h2 class="title">Sharon Geller</h2>
-            <p>{{getBottomText}}</p>
+            <h2 class="title">{{getTitle}}</h2>
+            <p>{{getOwnerText}}</p>
+      </div>
+      <div class="disciption-panel">
+          {{getDescription}}
       </div>
       <div class="button-panel">
           <v-btn
           icon
+          @click="handleClick"
           >
           <arrow-right-icon/>
           </v-btn>
@@ -19,14 +23,14 @@
 
 <script>
 import AcountGroupIcon from 'vue-material-design-icons/AccountGroup.vue';
-import AcountIcon from 'vue-material-design-icons/Account.vue';
+import LanIcon from 'vue-material-design-icons/Lan.vue';
 import FolderIcon from 'vue-material-design-icons/Folder.vue';
 import ArrowRightIcon from 'vue-material-design-icons/ArrowRight.vue';
 
 export default {
   name: 'ResultCard',
   components: {
-    AcountIcon,
+    LanIcon,
     FolderIcon,
     AcountGroupIcon,
     ArrowRightIcon,
@@ -40,8 +44,32 @@ export default {
     };
   },
   computed: {
-    getBottomText() {
-      return 'Manger: placeholder';
+    getTitle() {
+      if (this.data.DocumentType === 1) {
+        return this.data.Title;
+      }
+      return this.data.Name;
+    },
+    getOwnerText() {
+      if (this.data.DocumentType === 3) {
+        return `Manger: ${this.data.TeamLeader.Name}`;
+      }
+      if (this.data.DocumentType === 4) {
+        return `Owner: ${this.data.Owner.Name}`;
+      }
+      return '';
+    },
+    getDescription() {
+      if (this.data.Description) {
+        return this.data.Description;
+      }
+      return '';
+    },
+    isTeam() {
+      return this.data.DocumentType === 3;
+    },
+    isService() {
+      return this.data.DocumentType === 4;
     },
   },
   methods: {
@@ -83,5 +111,14 @@ export default {
     flex-direction: row-reverse;
     flex-grow : 1;
     margin-right: 1%;
+}
+.disciption-panel{
+    display: flex;
+    flex-direction: row;
+    flex-grow : 1;
+    margin-right: 1%;
+    height: 60%;
+    display: flex;
+    align-items: center;
 }
 </style>
