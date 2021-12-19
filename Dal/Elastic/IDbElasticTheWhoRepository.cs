@@ -8,14 +8,17 @@ namespace Tipalti.TheWho.Dal.Elastic
     {
         public void AddOrUpdate<TDocument>(TDocument document) where TDocument : class;
         public TDocument GetDocumentById<TDocument>(Id id) where TDocument : class;
-        public List<ResourceDocumentResult> GetResourceDocumentsByDomain(int domainId);
-        public List<ServiceDocument> GetResourceServiceByName(string serviceName);
-        public List<TeamConfigurationDocument> GetTeamConfiguartion();
+        public List<ResourceDocumentResult> GetResourceDocumentsByDomain(string domainId);
+        public List<ServiceDocument> GetServiceByOwner(string serviceName);
+        public List<TeamConfigurationDocument> GetTeamConfiguration();
         public List<string> GetDomains();
         public SpacesDocument GetSpaces();
-        public TeamDocument GetTeamConfiguartion(int domainId);
+        public TeamDocument GetTeamConfiguration(int domainId);
         public void DeleteDocument<TDocument>(Id id) where TDocument : class;
         public void BulkAddOrUpdate<TDocument>(List<TDocument> document) where TDocument : class;
-        public Dictionary<string, Tipalti.TheWho.Models.TeamDocument> GetTeams();
+        public Dictionary<string, TeamDocument> GetTeams();
+        public void DeleteIndex(string indexName);
+        public void CreateSimpleIndex<TDocument>() where TDocument : class;
+        public void CreateTeamIndex();
     }
 }
