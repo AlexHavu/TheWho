@@ -46,7 +46,7 @@ export default {
   },
   computed: {
     getTitle() {
-      if (this.data.documentType === 1) {
+      if (this.data.documentType === 1 || this.data.documentType === 2) {
         return this.data.title;
       }
       return this.data.name;
