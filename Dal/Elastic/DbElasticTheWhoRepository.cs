@@ -62,24 +62,11 @@ namespace Tipalti.TheWho.Dal.Elastic
 
         public static string GetIndexName(Type type)
         {
-            string indexName = ((IndexNameAttribute)Attribute.GetCustomAttribute(type, typeof(IndexNameAttribute)))?.IndexName;
+            string indexName = ((IndexNameAttribute) Attribute.GetCustomAttribute(type, typeof(IndexNameAttribute)))?.IndexName;
             return indexName ?? ElasticSearchClient.DefaultIndex;
         }
 
-        public void CreateRecourseIndexAndMapping()
-        {
-            var createIndexResponse = _elasticSearchClient.Indices.Create(GetIndexName(typeof(ResourceDocumentResult)), c => c
-                .Map<ResourceDocumentResult>(m => m
-                    .AutoMap()
-                    .Properties(ps => ps
-                        .Nested<DomainModel>(n => n
-                            .Name(nn => nn.Domains)
-                        )
-                    )
-                )
-            );
-        }
-        public void DeleteAllDocuments(string indexName)
+        public void DeleteIndex(string indexName)
         {
             var response = _elasticSearchClient.Indices.DeleteAsync(indexName);
         }
@@ -98,10 +85,10 @@ namespace Tipalti.TheWho.Dal.Elastic
             );
         }
 
-        public void CreateTeamConfigurationDocument()
+        public void CreateSimpleIndex<TDocument>() where TDocument : class
         {
-            var createIndexResponse = _elasticSearchClient.Indices.Create(GetIndexName(typeof(TeamConfigurationDocument)), c => c
-                .Map<TeamConfigurationDocument>(m => m
+            var createIndexResponse = _elasticSearchClient.Indices.Create(GetIndexName(typeof(TDocument)), c => c
+                .Map<TDocument>(m => m
                     .AutoMap()
                 )
             );
