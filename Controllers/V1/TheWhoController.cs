@@ -42,14 +42,14 @@ namespace Tipalti.TheWho.Controllers.V1
         /// </summary>
         /// <response code="200">List of all values</response>
         /// <returns>A list of values</returns> 
-        [HttpGet]
+        /*[HttpGet]
         [ProducesResponseType(typeof(List<int>), StatusCodes.Status200OK)]
         public async Task<ActionResult<List<int>>> GetAsync()
         {
             _logger.LogDebug("Values - Get all");
             return await Task.FromResult(Values);
 
-        }
+        }*/
 
         /// <summary>
         /// Get Teams
@@ -60,7 +60,7 @@ namespace Tipalti.TheWho.Controllers.V1
         [ProducesResponseType(typeof(List<string>), StatusCodes.Status200OK)]
         public List<string> GetTeamsNames()
         {
-            _logger.LogDebug("Values - Get team names");
+            _logger.LogDebug("Values - Get team names");            
             return _utils.GetTeamNames();            
         }
 
@@ -73,6 +73,7 @@ namespace Tipalti.TheWho.Controllers.V1
         [HttpGet("{id}")]
         [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(void), StatusCodes.Status404NotFound)]
+        [HttpGet("GetByIdAsync")]
         public async Task<ActionResult<int>> GetByIdAsync(string search)
         {
             _searchService.SearchResults(search);
