@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -26,6 +27,8 @@ namespace Tipalti.TheWho.Controllers.V1
         private readonly IConfluenceIndexer _confIndexer;
         private readonly IJiraIndexer _jiraIndexer;
         private readonly IServiceIndexer _serviceIndexer;
+        private readonly ITeamIndexer _teamIndexer;
+        private readonly IWebHostEnvironment _hostEnvironment;
 
         //this list is only for demonstrating CRUD methods and how to document API
         private static readonly List<int> Values = new List<int>
@@ -34,7 +37,8 @@ namespace Tipalti.TheWho.Controllers.V1
         };
 
         public TheWhoController(ILogger<ITheWhoLogger> logger, ISearchService searchService,
-            IIndexerUtils utils, IConfluenceIndexer confIndexer, IJiraIndexer jiraIndexer, IServiceIndexer serviceIndexer)
+            IIndexerUtils utils, IConfluenceIndexer confIndexer, IServiceIndexer serviceIndexer,
+            ITeamIndexer teamIndexer, IWebHostEnvironment environment, IJiraIndexer jiraIndexer)
         {
             _searchService = (SearchService)searchService;
             _logger = logger;
@@ -42,6 +46,8 @@ namespace Tipalti.TheWho.Controllers.V1
             _confIndexer = confIndexer;
             _jiraIndexer = jiraIndexer;
             _serviceIndexer = serviceIndexer;
+            _teamIndexer = teamIndexer;
+            _hostEnvironment = environment;
         }
 
         /// <summary>
@@ -150,6 +156,14 @@ namespace Tipalti.TheWho.Controllers.V1
         public async Task RunServiceIndexer()
         {
             await _serviceIndexer.RunAsync();
+        }
+
+        [ProducesResponseType(typeof(int), StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [HttpPost("RunTeamIndexer")]
+        public async Task RunTeamIndexer()
+        {
+            await _teamIndexer.RunAsync(_hostEnvironment.ContentRootPath);
         }
     }
 }
