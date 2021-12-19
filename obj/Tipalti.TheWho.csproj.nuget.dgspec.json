@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\TheWho\\Tipalti.TheWho.csproj": {}
+    "C:\\Git\\TheWho\\Tipalti.TheWho.csproj": {}
   },
   "projects": {
-    "C:\\TheWho\\Tipalti.TheWho.csproj": {
+    "C:\\Git\\TheWho\\Tipalti.TheWho.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\TheWho\\Tipalti.TheWho.csproj",
+        "projectUniqueName": "C:\\Git\\TheWho\\Tipalti.TheWho.csproj",
         "projectName": "Tipalti.TheWho",
-        "projectPath": "C:\\TheWho\\Tipalti.TheWho.csproj",
-        "packagesPath": "C:\\Users\\Alex.Shvartsman\\.nuget\\packages\\",
-        "outputPath": "C:\\TheWho\\obj\\",
+        "projectPath": "C:\\Git\\TheWho\\Tipalti.TheWho.csproj",
+        "packagesPath": "C:\\Users\\Hila.Harbon\\.nuget\\packages\\",
+        "outputPath": "C:\\Git\\TheWho\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Alex.Shvartsman\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Hila.Harbon\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -73,6 +73,10 @@
               "target": "Package",
               "version": "[3.1.9, )"
             },
+            "NEST": {
+              "target": "Package",
+              "version": "[7.16.0, )"
+            },
             "Serilog": {
               "target": "Package",
               "version": "[2.9.0, )"
@@ -124,6 +128,12 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
+          "downloadDependencies": [
+            {
+              "name": "Microsoft.NETCore.App.Host.win-x64",
+              "version": "[3.1.18, 3.1.18]"
+            }
+          ],
           "frameworkReferences": {
             "Microsoft.AspNetCore.App": {
               "privateAssets": "none"
@@ -132,7 +142,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.402\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.303\\RuntimeIdentifierGraph.json"
         }
       }
     }

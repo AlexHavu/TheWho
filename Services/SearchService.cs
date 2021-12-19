@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Tipalti.TheWho.Dal.Elastic;
+using Tipalti.TheWho.Enums;
 
 namespace Tipalti.TheWho.Services
 {
@@ -16,11 +17,10 @@ namespace Tipalti.TheWho.Services
         }
         public bool SearchResults(string search)
         {
-            return _elasticDB.GetSearchResults(search);
+            var domainID = (int)Enum.Parse(typeof(eDomain), search);
+            var resourceModel = _elasticDB.GetResourceDocumentsByDomain(domainID);
+            return true;
         }
-        public bool GetDocByResourceType(string type, int id)
-        {
-            return _elasticDB.GetSearchResults(type, id);
-        }
+       
     }
 }
