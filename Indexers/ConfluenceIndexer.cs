@@ -29,7 +29,7 @@ namespace Tipalti.TheWho.Indexers
             try
             {
                 var spaces = _dbElasticTheWhoRepository.GetSpacesKeys();
-                Result<IEnumerable<ResourceDocumentResult>> result = await _confluenceRepository.GetPagesAsync(spaces, domains);
+                Result<IEnumerable<ResourceDocument>> result = await _confluenceRepository.GetPagesAsync(spaces, domains);
                 if(!result.WasOperationSuccessful)
                 {
                     return Result.CreateFailResult(result.FailureReason);
