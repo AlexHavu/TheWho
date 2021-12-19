@@ -21,7 +21,7 @@ namespace Tipalti.TheWho.Controllers.V1
     {
         private SearchService _searchService;
         private readonly ILogger _logger;
-        private readonly IDbElasticTheWhoRepository _esRepo;
+        private readonly IIndexerUtils _utils;
 
         //this list is only for demonstrating CRUD methods and how to document API
         private static readonly List<int> Values = new List<int>
@@ -30,11 +30,11 @@ namespace Tipalti.TheWho.Controllers.V1
         };
 
         public TheWhoController(ILogger<ITheWhoLogger> logger, ISearchService searchService,
-            IDbElasticTheWhoRepository repo)
+            IIndexerUtils utils)
         {
             _searchService = (SearchService)searchService;
             _logger = logger;
-            _esRepo = repo;
+            _utils = utils;
         }
 
         /// <summary>
@@ -61,8 +61,7 @@ namespace Tipalti.TheWho.Controllers.V1
         public List<string> GetTeamsNames()
         {
             _logger.LogDebug("Values - Get team names");
-            Dictionary<string, TeamDocument> teams = _esRepo.GetTeams();            
-            return new List<string>(teams.Keys);
+            return _utils.GetTeamNames();            
         }
 
         /// <summary>
