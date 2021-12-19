@@ -2,9 +2,9 @@
   <v-card class="services" elevation="1" outlined>
     <div class="services-header">{{ header }}</div>
     <div class="services-list">
-      <div v-for="serviceItem in services" :key="serviceItem.id" class="service">
+      <div v-for="serviceItem in services" :key="serviceItem" class="service">
         <img class="service-icon" src="@/assets/service.png" />
-        <div>{{ serviceItem.title }}</div>
+        <div>{{ serviceItem }}</div>
       </div>
     </div>
   </v-card>

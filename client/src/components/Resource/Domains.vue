@@ -2,9 +2,9 @@
   <v-card class="domains" elevation="1" outlined>
     <div class="domains-header">{{ header }}</div>
     <div class="domains-list">
-      <div v-for="domainsItem in domains" :key="domainsItem.id" class="domain">
+      <div v-for="domainsItem in domains" :key="domainsItem" class="domain">
         <img class="domain-icon" src="@/assets/domain.png" />
-        <div>{{ domainsItem.title }}</div>
+        <div>{{ domainsItem }}</div>
       </div>
     </div>
   </v-card >
