@@ -34,11 +34,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Models\" />
-    <Folder Include="ElasticClient\" />
-    <Folder Include="Documents\" />
+    <Folder Include="Dal\Elastic\ElasticClient\" />
+    <Folder Include="Dal\Elastic\Documents\" />
     <Folder Include="Enums\" />
-    <Folder Include="Repository\" />
   </ItemGroup>
 
 </Project>

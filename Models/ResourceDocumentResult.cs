@@ -1,15 +1,22 @@
 ﻿using System.Collections.Generic;
 
-namespace Tipalti.TheWho.Dal.Elastic.Documents
+namespace Tipalti.TheWho.Models
 {
-    [IndexName("the-who-resource")]
-    public class ResourceDocumentResult
+
+
+    public class ResourceDocumentResult: BaseSearchResult
     {
-        public int Id { get; set; }
         public string Title { get; set; }
         public int RecourseType { get; set; }
         public List<DomainModel> Domains { get; set; }
         public string Link { get; set; }
+
+        public override void SetPrevew()
+        {
+           
+        }
+
+
     }
 
     public class DomainModel
