@@ -13,6 +13,8 @@ using System.Collections.Generic;
 using Polly.Contrib.WaitAndRetry;
 using Tipalti.TheWho.Dal.Confluence;
 using Polly;
+using Tipalti.TheWho.Models.Jira;
+using Tipalti.TheWho.Dal.Jira;
 
 namespace Tipalti.TheWho
 {
@@ -33,6 +35,22 @@ namespace Tipalti.TheWho
 
             IEnumerable<TimeSpan> delay = Backoff.DecorrelatedJitterBackoffV2(medianFirstRetryDelay: TimeSpan.FromSeconds(1), retryCount: confluenceConfiguration.HttpClientRetryCount);
             services.AddHttpClient<IConfluenceRepository, ConfluenceRepository>()
+            .AddTransientHttpErrorPolicy(p =>
+            {
+                return p.WaitAndRetryAsync(sleepDurations: delay,
+                    onRetry: (x, i, c, t) => logger.LogWarning($"Request failed {x.Result}", x.Exception)
+                );
+            });
+        }
+
+        public static void AddJiraHttpClient(this IServiceCollection services, IConfiguration configuration, ILogger logger)
+        {
+            var jiraConfiguration = new JiraConfiguration();
+            configuration.Bind(JiraConfiguration.Provider, jiraConfiguration);
+            services.AddSingleton(jiraConfiguration);
+
+            IEnumerable<TimeSpan> delay = Backoff.DecorrelatedJitterBackoffV2(medianFirstRetryDelay: TimeSpan.FromSeconds(1), retryCount: jiraConfiguration.HttpClientRetryCount);
+            services.AddHttpClient<IJiraReposiroty, JiraRepository>()
             .AddTransientHttpErrorPolicy(p =>
             {
                 return p.WaitAndRetryAsync(sleepDurations: delay,
