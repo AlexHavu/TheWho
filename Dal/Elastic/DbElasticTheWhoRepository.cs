@@ -41,10 +41,10 @@ namespace Tipalti.TheWho.Dal.Elastic
             return getResponse?.Source;
         }
 
-        public List<ResourceDocument> GetResourceDocumentsByDomain(int domainId)
+        public List<ResourceDocumentResult> GetResourceDocumentsByDomain(int domainId)
         {
-            ISearchResponse<ResourceDocument> searchResult = _elasticSearchClient.Search<ResourceDocument>(s => s
-                .Index(GetIndexName(typeof(ResourceDocument)))
+            ISearchResponse<ResourceDocumentResult> searchResult = _elasticSearchClient.Search<ResourceDocumentResult>(s => s
+                .Index(GetIndexName(typeof(ResourceDocumentResult)))
                 .Query(q => q
                     .Match(m => m
                         .Field("domains.domainId")
@@ -68,8 +68,8 @@ namespace Tipalti.TheWho.Dal.Elastic
 
         public void CreateRecourseIndexAndMapping()
         {
-            var createIndexResponse = _elasticSearchClient.Indices.Create(GetIndexName(typeof(ResourceDocument)), c => c
-                .Map<ResourceDocument>(m => m
+            var createIndexResponse = _elasticSearchClient.Indices.Create(GetIndexName(typeof(ResourceDocumentResult)), c => c
+                .Map<ResourceDocumentResult>(m => m
                     .AutoMap()
                     .Properties(ps => ps
                         .Nested<DomainModel>(n => n
@@ -82,7 +82,7 @@ namespace Tipalti.TheWho.Dal.Elastic
         public void DeleteAllDocuments()
         {
             var response = _elasticSearchClient.Indices.DeleteAsync(GetIndexName(typeof(TeamDocument)));
-            response = _elasticSearchClient.Indices.DeleteAsync(GetIndexName(typeof(ResourceDocument)));
+            response = _elasticSearchClient.Indices.DeleteAsync(GetIndexName(typeof(ResourceDocumentResult)));
         }
 
         public void CreateTeamIndexAndMapping()
