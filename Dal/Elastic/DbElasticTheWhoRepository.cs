@@ -79,10 +79,9 @@ namespace Tipalti.TheWho.Dal.Elastic
                 )
             );
         }
-        public void DeleteAllDocuments()
+        public void DeleteAllDocuments(string indexName)
         {
-            var response = _elasticSearchClient.Indices.DeleteAsync(GetIndexName(typeof(TeamDocument)));
-            response = _elasticSearchClient.Indices.DeleteAsync(GetIndexName(typeof(ResourceDocumentResult)));
+            var response = _elasticSearchClient.Indices.DeleteAsync(indexName);
         }
 
         public void CreateTeamIndexAndMapping()
