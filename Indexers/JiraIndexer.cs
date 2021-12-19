@@ -6,6 +6,7 @@ using Tipalti.TheWho.Dal.Elastic;
 using Tipalti.TheWho.Dal.Elastic.Documents;
 using Tipalti.TheWho.Dal.Jira;
 using Tipalti.TheWho.Enums;
+using Tipalti.TheWho.Models;
 using Tipalti.TheWho.Models.Jira;
 using Tipalti.TheWho.Models.Jira.RestApiResponse;
 using Tipalti.Utils.Result;
@@ -30,7 +31,7 @@ namespace Tipalti.TheWho.Indexers
         public async Task<Result> RunAsync()
         {
             IEnumerable<TeamConfigurationDocument> teams = _dbElasticTheWhoRepository.GetTeams().Values;
-            List<ResourceDocumentResult> documentsToAdd = new List<ResourceDocumentResult>();
+            List<ResourceDocument> documentsToAdd = new List<ResourceDocument>();
 
             foreach (TeamConfigurationDocument team in teams)
             {
@@ -47,9 +48,9 @@ namespace Tipalti.TheWho.Indexers
             return Result.CreateSuccessResult();
         }
 
-        private IEnumerable<ResourceDocumentResult> GetRelevantIssuesAsResources(IEnumerable<IssuesResult> issues, IEnumerable<string> domains)
+        private IEnumerable<ResourceDocument> GetRelevantIssuesAsResources(IEnumerable<IssuesResult> issues, IEnumerable<string> domains)
         {
-            List<ResourceDocumentResult> results = new List<ResourceDocumentResult>();
+            List<ResourceDocument> results = new List<ResourceDocument>();
 
             foreach (IssuesResult issue in issues)
             {
@@ -63,9 +64,9 @@ namespace Tipalti.TheWho.Indexers
             return results;
         }
 
-        private ResourceDocumentResult ConvertToModel(IssuesResult issuesResult)
+        private ResourceDocument ConvertToModel(IssuesResult issuesResult)
         {
-            return new ResourceDocumentResult
+            return new ResourceDocument
             {
                 Id = issuesResult.Id,
                 RecourseType = (int)eRecourseType.Jira,
