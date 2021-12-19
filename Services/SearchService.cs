@@ -52,6 +52,7 @@ namespace Tipalti.TheWho.Services
             {
                 DocumentType = eDocumentType.Team,
                 Confluence = dbTeam.Confluence,
+                Jira = dbTeam.Jira,
                 Name = dbTeam.TeamName,
                 Slack = dbTeam.Slack,
                 Services = services.Select(s => s.Name).ToList(),
@@ -117,8 +118,8 @@ namespace Tipalti.TheWho.Services
             }
             ).ToList();
 
-            List<Models.AllResult> jira = searchRsult.Where(r => r.DocumentType == eDocumentType.JiraRecourse).Take(5).ToList();
-            List<Models.AllResult> Con = searchRsult.Where(r => r.DocumentType == eDocumentType.ConfluenceRecourse).Take(5).ToList();
+            List<Models.AllResult> jira = searchRsult.Where(r => r.DocumentType == eDocumentType.JiraRecourse).Take(3).ToList();
+            List<Models.AllResult> Con = searchRsult.Where(r => r.DocumentType == eDocumentType.ConfluenceRecourse).Take(3).ToList();
             jira.AddRange(Con);
 
 
