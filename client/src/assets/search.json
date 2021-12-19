@@ -2,6 +2,7 @@
     {
       "Id": 1,
       "Confluence": "https://confluence.tipalti.com:8090/pages/viewpage.action?spaceKey=KBTES&title=Tipalti+Engineering+Knowledge+Base",
+      "DocumentType":3, 
       "Domains": [
         "Approval domain",
         "Food domain"
@@ -56,6 +57,7 @@
     {
       "Id": 2,
       "Title": "Confluence resource",
+      "DocumentType":1, 
       "RecourseType": 2,
       "Domains": [
         {
@@ -74,7 +76,8 @@
     {
       "Id": 5,
       "Name": "Super service",
-      "Description": "",
+      "DocumentType":4, 
+      "Description": "bla bla balba lab la bla lablab lal blal bla lblabl ablalb la lbalb la bljhrgfh ygf sdhf ghdghf gdg dhfg jdf ghdgdhf h",
       "Owner": {
         "Id": 1,
         "Confluence": "https://confluence.tipalti.com:8090/pages/viewpage.action?spaceKey=KBTES&title=Tipalti+Engineering+Knowledge+Base",

@@ -1,9 +1,10 @@
 <template>
   <div class="filter-selection">
       <h1 class="title">Filter By</h1>
-      <v-btn class="card" elevation="2" outlined @click="handleClick({})">test(1)</v-btn>
-      <v-btn class="card" elevation="2" outlined>test</v-btn>
-      <v-btn class="card" elevation="2" outlined>test</v-btn>
+      <v-btn class="card" elevation="2" outlined @click="handleClick(3)">Team</v-btn>
+      <v-btn class="card" elevation="2" outlined  @click="handleClick(4)">Service</v-btn>
+      <v-btn class="card" elevation="2" outlined @click="handleClick(2)">Jira</v-btn>
+      <v-btn class="card" elevation="2" outlined @click="handleClick(1)">Confluence </v-btn>
 
   </div>
 </template>
@@ -28,8 +29,8 @@ export default {
     },
   },
   methods: {
-    handleClick(filterBy) {
-      this.$emit('filter', { filterBy });
+    handleClick(selectedFilter) {
+      this.$emit('filter', selectedFilter);
     },
   },
 };

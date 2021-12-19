@@ -1,14 +1,14 @@
 <template>
   <v-card class="card" elevation="2" outlined>
-      <lan-icon class="icon" v-if="true"/>
-      <folder-icon class="icon" v-if="false"/>
-      <acount-group-icon class="icon" v-if="false"/>
+      <lan-icon class="icon" v-if="isService"/>
+      <folder-icon class="icon" v-if="!isTeam && !isService"/>
+      <acount-group-icon class="icon" v-if="isTeam"/>
       <div class="team-user-info">
-            <h2 class="title">Sharon Geller</h2>
+            <h2 class="title">{{getTitle}}</h2>
             <p>{{getOwnerText}}</p>
       </div>
       <div class="disciption-panel">
-          hi
+          {{getDescription}}
       </div>
       <div class="button-panel">
           <v-btn
@@ -44,8 +44,32 @@ export default {
     };
   },
   computed: {
+    getTitle() {
+      if (this.data.DocumentType === 1) {
+        return this.data.Title;
+      }
+      return this.data.Name;
+    },
     getOwnerText() {
-      return 'Manger: placeholder';
+      if (this.data.DocumentType === 3) {
+        return `Manger: ${this.data.TeamLeader.Name}`;
+      }
+      if (this.data.DocumentType === 4) {
+        return `Owner: ${this.data.Owner.Name}`;
+      }
+      return '';
+    },
+    getDescription() {
+      if (this.data.Description) {
+        return this.data.Description;
+      }
+      return '';
+    },
+    isTeam() {
+      return this.data.DocumentType === 3;
+    },
+    isService() {
+      return this.data.DocumentType === 4;
     },
   },
   methods: {

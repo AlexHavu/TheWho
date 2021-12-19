@@ -5,16 +5,10 @@
       </div>
       <div class="results-area">
         <div class="filter-area">
-          <filter-results/>
+          <filter-results @filter="handleFilter"/>
         </div>
         <div class="results">
-          <result-card></result-card>
-          <result-card></result-card>
-          <result-card></result-card>
-          <result-card></result-card>
-          <result-card></result-card>
-          <result-card></result-card>
-          <result-card></result-card>
+          <result-card v-for="result in searchResult" :key="result.id" :data="result"></result-card>
         </div>
       </div>
   </div>
@@ -24,6 +18,7 @@
 import SearchField from '@/components/Search/SearchField.vue';
 import ResultCard from '@/components/Search/ResultCard.vue';
 import FilterResults from '@/components/Search/Filter.vue';
+import search from '@/assets/search.json';
 
 export default {
   name: 'SearchPage',
@@ -31,6 +26,22 @@ export default {
     SearchField,
     ResultCard,
     FilterResults,
+  },
+  data() {
+    return {
+      allSearchResult: search,
+      searchResult: [],
+      documentTypes: [],
+    };
+  },
+  methods: {
+    handleFilter(type) {
+      this.searchResult = this.allSearchResult.filter((x) => x.DocumentType === type);
+    },
+  },
+  mounted() {
+    this.searchResult = this.allSearchResult;
+    this.documentTypes = this.allSearchResult.map((x) => x.DocumentType);
   },
 };
 </script>
