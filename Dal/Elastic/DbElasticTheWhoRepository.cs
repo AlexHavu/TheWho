@@ -62,27 +62,13 @@ namespace Tipalti.TheWho.Dal.Elastic
 
         public static string GetIndexName(Type type)
         {
-            string indexName = ((IndexNameAttribute)Attribute.GetCustomAttribute(type, typeof(IndexNameAttribute)))?.IndexName;
+            string indexName = ((IndexNameAttribute) Attribute.GetCustomAttribute(type, typeof(IndexNameAttribute)))?.IndexName;
             return indexName ?? ElasticSearchClient.DefaultIndex;
         }
 
-        public void CreateRecourseIndexAndMapping()
+        public void DeleteIndex(string indexName)
         {
-            var createIndexResponse = _elasticSearchClient.Indices.Create(GetIndexName(typeof(ResourceDocumentResult)), c => c
-                .Map<ResourceDocumentResult>(m => m
-                    .AutoMap()
-                    .Properties(ps => ps
-                        .Nested<DomainModel>(n => n
-                            .Name(nn => nn.Domains)
-                        )
-                    )
-                )
-            );
-        }
-        public void DeleteAllDocuments()
-        {
-            var response = _elasticSearchClient.Indices.DeleteAsync(GetIndexName(typeof(TeamDocument)));
-            response = _elasticSearchClient.Indices.DeleteAsync(GetIndexName(typeof(ResourceDocumentResult)));
+            var response = _elasticSearchClient.Indices.DeleteAsync(indexName);
         }
 
         public void CreateTeamIndexAndMapping()
@@ -99,80 +85,13 @@ namespace Tipalti.TheWho.Dal.Elastic
             );
         }
 
-        public Dictionary<string, Tipalti.TheWho.Models.TeamDocument> GetTeams()
+        public void CreateSimpleIndex<TDocument>() where TDocument : class
         {
-            ISearchResponse<TeamDocumentConfiguration> searchResult = _elasticSearchClient.Search<TeamDocumentConfiguration>(s => s
-                            .Index(GetIndexName(typeof(TeamDocumentConfiguration)))
-                            .Query(q => q)
-                        );
-            return searchResult?.Documents?.ToDictionary(x => x.TeamName, 
-                x => new Tipalti.TheWho.Models.TeamDocument() {
-                Name = x.TeamName
-            });
-
-            /*return searchResult?.Documents?.ToDictionary(x => x.Name, 
-                x => new Tipalti.TheWho.Models.TeamDocument() {
-                Id = x.Id, Name = x.Name
-            });*/
+            var createIndexResponse = _elasticSearchClient.Indices.Create(GetIndexName(typeof(TDocument)), c => c
+                .Map<TDocument>(m => m
+                    .AutoMap()
+                )
+            );
         }
-
-        //add async and error handling
-        //============================
-        //var indexManyResponse = client.IndexMany(people);
-        //if (indexManyResponse.Errors)
-        //{
-        //    // the response can be inspected for errors
-        //    foreach (var itemWithError in indexManyResponse.ItemsWithErrors)
-        //    {
-        //        // if there are errors, they can be enumerated and inspected
-        //        Console.WriteLine("Failed to index document {0}: {1}",
-        //            itemWithError.Id, itemWithError.Error);
-        //    }
-        //}
-        //// alternatively, documents can be indexed asynchronously
-        //var indexManyAsyncResponse = await client
-        //public void CreateMapping()
-        //{
-        //    var createIndexResponse = _elasticSearchClient.Indices.Create("test11", c => c
-        //        .Map<RecourseDocument>(m => m
-        //            .Properties(ps => ps
-        //                .Text(s => s
-        //                    .Name(n => n.Title))
-        //                    .Number(s => s
-        //                        .Name(n => n.RecourseType))
-        //                .Number(s => s
-        //                    .Name(n => n.Link)
-        //                )
-        //                .Object<Employee>(o => o
-        //                    .Name(n => n.Employees)
-        //                    .Properties(eps => eps
-        //                        .Text(s => s
-        //                            .Name(e => e.FirstName)
-        //                        )
-        //                        .Text(s => s
-        //                            .Name(e => e.LastName)
-        //                        )
-        //                        .Number(n => n
-        //                            .Name(e => e.Salary)
-        //                            .Type(NumberType.Integer)
-        //                        )
-        //                    )
-        //                )
-        //            )
-        //        )
-        //    );
-
-
-        //var createIndexResponse = _elasticSearchClient.Indices.Create("recourse", c => c
-        //    .Map<RecourseDocument>(m => m
-        //        .AutoMap()
-        //        .Properties(ps => ps
-        //            .Nested<DomainModel>(n => n
-        //                .Name(nn => nn.Domains)
-        //            )
-        //        )
-        //    )
-        //);
-        //   }
     }
 }

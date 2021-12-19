@@ -35,7 +35,6 @@
 
   <ItemGroup>
     <Folder Include="Dal\Elastic\ElasticClient\" />
-    <Folder Include="Dal\Elastic\Documents\" />
     <Folder Include="Enums\" />
   </ItemGroup>
 

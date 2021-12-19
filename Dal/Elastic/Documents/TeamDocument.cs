@@ -7,6 +7,7 @@ namespace Tipalti.TheWho.Dal.Elastic.Documents
     {
         public int Id { get; set; }
         public string Confluence { get; set; }
+        public string Jira { get; set; }
         public List<string> Domains { get; set; }
         public string Name { get; set; }
         public List<string> Services { get; set; }
