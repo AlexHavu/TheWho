@@ -79,7 +79,7 @@ namespace Tipalti.TheWho.Dal.Elastic
                 )
             );
         }
-        public void DeleteAllDocuments(string indexName)
+        public void DeleteIndex(string indexName)
         {
             var response = _elasticSearchClient.Indices.DeleteAsync(indexName);
         }
@@ -98,10 +98,10 @@ namespace Tipalti.TheWho.Dal.Elastic
             );
         }
 
-        public void CreateTeamConfigurationDocument()
+        public void CreateSimpleIndex<TDocument>() where TDocument : class
         {
-            var createIndexResponse = _elasticSearchClient.Indices.Create(GetIndexName(typeof(TeamConfigurationDocument)), c => c
-                .Map<TeamConfigurationDocument>(m => m
+            var createIndexResponse = _elasticSearchClient.Indices.Create(GetIndexName(typeof(TDocument)), c => c
+                .Map<TDocument>(m => m
                     .AutoMap()
                 )
             );
