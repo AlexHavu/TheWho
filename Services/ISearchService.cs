@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Tipalti.TheWho.Models;
 
 namespace Tipalti.TheWho.Services
 {
-     public interface ISearchService
-     {
-        public bool SearchResults(string search);
-     }
+    public interface ISearchService
+    {
+        public List<AllResult> SearchResults(string search);
+    }
 }

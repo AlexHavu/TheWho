@@ -75,14 +75,12 @@ namespace Tipalti.TheWho.Controllers.V1
         /// <returns>A value with specified id</returns>
         /// <response code="200">Returns the value with the specified id</response>
         /// <response code="404">No value was found with the specified id</response>
-        [HttpGet("{id}")]
-        [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(void), StatusCodes.Status404NotFound)]
-        [HttpGet("GetByIdAsync")]
-        public async Task<ActionResult<int>> GetByIdAsync(string search)
+        [HttpGet("Search")]
+        public List<AllResult> Search(string search)
         {
-            _searchService.SearchResults(search);
-            return 1;
+            return _searchService.SearchResults(search);
+
 
         }
 
