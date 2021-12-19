@@ -120,12 +120,13 @@ namespace Tipalti.TheWho.Dal.Elastic
 
         public List<string> GetDomains()
         {
-            throw new NotImplementedException();
-        }
+            List<string> domains = new List<string>();
+            foreach (var document in GetAllDocuments<TeamConfigurationDocument>())
+            {
+                domains.AddRange(document.Domains);
+            }
 
-        public SpacesDocument GetSpaces()
-        {
-            throw new NotImplementedException();
+            return domains;
         }
 
         public TeamDocument GetTeamConfiguration(int domainId)
@@ -136,6 +137,17 @@ namespace Tipalti.TheWho.Dal.Elastic
         public List<string> GetSpacesKeys()
         {
             return GetDocumentById<SpacesDocument>(1)?.Spaces;
+        }
+
+        private List<TDocument> GetAllDocuments<TDocument>() where TDocument : class
+        {
+            var searchResponse = _elasticSearchClient.Search<TDocument>(s => s
+                .Index(GetIndexName(typeof(TDocument)))
+                .Query(q => q.MatchAll()
+                )
+            );
+
+            return searchResponse.Documents.ToList();
         }
     }
 }

@@ -13,7 +13,6 @@ namespace Tipalti.TheWho.Dal.Elastic
         public List<TeamConfigurationDocument> GetTeamConfiguration();
         public List<string> GetDomains();
         public List<string> GetSpacesKeys();
-        public SpacesDocument GetSpaces();
         public TeamDocument GetTeamConfiguration(int domainId);
         public void DeleteDocument<TDocument>(Id id) where TDocument : class;
         public void BulkAddOrUpdate<TDocument>(List<TDocument> document) where TDocument : class;

@@ -1,14 +1,17 @@
-﻿using IdentityModel.Client;
+﻿using HtmlAgilityPack;
+using IdentityModel.Client;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Tipalti.TheWho.Dal.Confluence.Models;
 using Tipalti.TheWho.Dal.Elastic.Documents;
 using Tipalti.TheWho.Enums;
 using Tipalti.TheWho.Models.Confluence;
 using Tipalti.TheWho.Models.Confluence.RestApiResponse;
+using Tipalti.TheWho.Services;
 using Tipalti.Utils.Result;
 
 
@@ -18,15 +21,24 @@ namespace Tipalti.TheWho.Dal.Confluence
     {
         private readonly HttpClient _client;
         private readonly ConfluenceConfiguration _confluenceConfiguration;
+        private readonly IIndexerUtils _indexerUtils;
         private const string GetContentSearchApi = "content/search";
+        private const string GetChildPages = "child/page";
+        private const string GetContentApi = "content";
         private const string ConfluenceRestPath = "/rest/api/";
+        private const string ExpandBodyQueryParam = "expand=body.view";
         private const int PageSize = 25;
+        private readonly List<string> _teamNames;
 
-        public ConfluenceRepository(HttpClient client, ConfluenceConfiguration confluenceConfiguration)
+        public ConfluenceRepository(HttpClient client, 
+            ConfluenceConfiguration confluenceConfiguration,
+            IIndexerUtils indexerUtils)
         {
             _client = client;
             _confluenceConfiguration = confluenceConfiguration;
             _client.SetBearerToken(_confluenceConfiguration.Token);
+            _indexerUtils = indexerUtils;
+            _teamNames = _indexerUtils.GetTeamNames();
         }
 
         public async Task<Result<IEnumerable<ResourceDocumentResult>>> GetPagesAsync(IEnumerable<string> spaces, IEnumerable<string> domains)
@@ -66,7 +78,7 @@ namespace Tipalti.TheWho.Dal.Confluence
                 Link = $"{_confluenceConfiguration.BaseUrl}{confluenceResult.Links.Webui}",
                 Title = confluenceResult.Title
             };
-        }
+        }        
 
         private async Task<Result<Response>> GetPages(string spacesExpression, string textExpression, int start)
         {
@@ -98,6 +110,90 @@ namespace Tipalti.TheWho.Dal.Confluence
         {
             return $"text~'{String.Join("' or text~'", domains)}'";
         }
-    }
 
+        private string getTeamFromBody(string bodyHtml)
+        {
+            var doc = new HtmlDocument();
+            doc.LoadHtml(bodyHtml);
+
+            var htmlNode = doc.DocumentNode.SelectSingleNode("//strong[text()='Owner:']");
+            if (htmlNode != null)
+            {
+                string owner = htmlNode.ParentNode.NextSibling.InnerHtml;
+                if (!owner.Contains("<")) // filter out if we are holding an element
+                {
+                    if (owner.IndexOf("(") > 0)
+                    {
+                        owner = owner.Substring(0, owner.IndexOf("("));                                                
+                    }
+
+                    /*foreach (string teamName in _teamNames)
+                    {
+                        if (owner.Contains(teamName))
+                        {
+                            return teamName;
+                        }
+                    }*/
+                    return _teamNames.Where(x => owner.Contains(x)).FirstOrDefault();                    
+                }
+            }
+
+            return string.Empty;
+        }
+
+        private async Task<string> GetService(ChildPageModel page)
+        {
+            string path = @$"{_confluenceConfiguration.BaseUrl}{ConfluenceRestPath}{GetContentApi}/{page.Id}?{ExpandBodyQueryParam}";
+            //string path = $"https://confluence.tipalti.com:8090/rest/api/content/{page.Id}?expand=body.view";
+            HttpResponseMessage response = await _client.GetAsync(path);
+            if (response.IsSuccessStatusCode)
+            {
+                string ownerTeam = null;
+                PageModel result = JsonConvert.DeserializeObject<PageModel>(await response.Content.ReadAsStringAsync());
+                if (!result.Title.Contains("Template"))
+                {
+                    ownerTeam = getTeamFromBody(result.Body.View.Value);
+                }
+
+                if (!String.IsNullOrEmpty(ownerTeam))
+                {                    
+                    return ownerTeam;                    
+                }                
+            }
+            return null;
+        }
+
+        private async Task<IEnumerable<ServiceDocument>> GetServices(string servicesRootId)
+        {            
+            string path = @$"{_confluenceConfiguration.BaseUrl}{ConfluenceRestPath}{GetContentApi}/{servicesRootId}/{GetChildPages}";
+            //string path = $"https://confluence.tipalti.com:8090/rest/api/content/{servicesRootId}/child/page";
+            var results = new List<ServiceDocument>();
+            HttpResponseMessage response = await _client.GetAsync(path);
+            if (response.IsSuccessStatusCode)
+            {
+                ChildPagesModel result = JsonConvert.DeserializeObject<ChildPagesModel>(await response.Content.ReadAsStringAsync());
+
+                foreach (ChildPageModel item in result.results)
+                {
+                    string owner = await GetService(item);
+                    if (!String.IsNullOrEmpty(owner))
+                    {
+                        results.Add(new ServiceDocument()
+                        {
+                            Name = item.Title,
+                            Id = item.Id,
+                            Owner = owner
+                        });
+                    }
+                }                
+            }
+
+            return results;
+        }
+
+        public async Task<Result<IEnumerable<ServiceDocument>>> GetServicesAsync(string servicesRootId)
+        {       
+            return Result<IEnumerable<ServiceDocument>>.CreateSuccessResult(await GetServices(servicesRootId));
+        }
+    }
 }
