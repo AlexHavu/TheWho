@@ -55,9 +55,9 @@ namespace Tipalti.TheWho.Controllers.V1
         [HttpGet("{id}")]
         [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(void), StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<int>> GetByIdAsync(string id)
+        public async Task<ActionResult<int>> GetByIdAsync(string search)
         {
-            _searchService.SearchResults(id);
+            _searchService.SearchResults(search);
             return 1;
 
         }

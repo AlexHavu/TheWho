@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Tipalti.TheWho.Documents
+namespace Tipalti.TheWho.Dal.Elastic.Documents
 {
     public class IndexNameAttribute: Attribute
     {

@@ -2,7 +2,7 @@
 using Elasticsearch.Net;
 using Nest;
 
-namespace Tipalti.TheWho.ElasticClient
+namespace Tipalti.TheWho.Dal.Elastic
 {
     public sealed class ElasticSearchClient
     {

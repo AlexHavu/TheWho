@@ -1,14 +1,14 @@
 ﻿using System.Collections.Generic;
 using Nest;
-using Tipalti.TheWho.Documents;
+using Tipalti.TheWho.Dal.Elastic.Documents;
 
-namespace Tipalti.TheWho.Repository
+namespace Tipalti.TheWho.Dal.Elastic
 {
-    public interface IElasticSearchRepository
+    public interface IDbElasticTheWhoRepository
     {
         public void AddOrUpdate<TDocument>(TDocument document) where TDocument : class;
         public TDocument GetDocumentById<TDocument>(Id id) where TDocument : class;
-        public List<ResourceDocument> GetResourceDocumentsByDomain(string domainId);
+        public List<ResourceDocument> GetResourceDocumentsByDomain(int domainId);
         public void DeleteDocument<TDocument>(Id id) where TDocument : class;
         public void BulkAddOrUpdate<TDocument>(List<TDocument> document) where TDocument : class;
     }

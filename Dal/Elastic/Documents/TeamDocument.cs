@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Tipalti.TheWho.Documents
+namespace Tipalti.TheWho.Dal.Elastic.Documents
 {
     [IndexName("the-who-team")]
     public class TeamDocument
