@@ -54,9 +54,15 @@ namespace Tipalti.TheWho.Dal.Elastic
             return searchResults?.Documents?.ToList();
         }
 
-        public List<ServiceDocument> GetServiceByOwner(string serviceName)
+        public List<ServiceDocument> GetServiceByOwner(string owner)
         {
-            throw new NotImplementedException();
+           var searchResults = _elasticSearchClient.Search<ServiceDocument>(s => s
+                .Index(GetIndexName(typeof(ServiceDocument)))
+                .Query(q => q.QueryString(qs => qs.Query(owner)))
+                .From(0)
+                .Size(500)
+            );
+            return searchResults?.Documents?.ToList();
         }
 
         public void DeleteDocument<TDocument>(Id id) where TDocument : class

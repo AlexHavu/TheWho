@@ -40,6 +40,7 @@
     <Folder Include="Dal\Confluence\Models\" />
     <Folder Include="Dal\Elastic\ElasticClient\" />
     <Folder Include="Enums\" />
+    <Folder Include="ExternalFiles\" />
   </ItemGroup>
 
 </Project>
