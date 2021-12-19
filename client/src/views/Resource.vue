@@ -1,12 +1,12 @@
 <template>
   <div class="hello">
     <team-members
-    :teamName="resource.Name"
-    :teamLeader="resource.TeamLeader"
-    :teamMembers="resource.TeamMembers"/>
-    <quick-links :slack="resource.Slack" :jira="resource.Jira" :confluence="resource.Confluence"/>
-    <services :services="resource.Services"/>
-    <domains :domains="resource.Domains"/>
+    :teamName="resource.name"
+    :teamLeader="resource.teamLeader"
+    :teamMembers="resource.teamMembers"/>
+    <quick-links :slack="resource.slack" :jira="resource.jira" :confluence="resource.confluence"/>
+    <services :services="resource.services"/>
+    <domains :domains="resource.domains"/>
   </div>
 </template>
 

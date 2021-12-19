@@ -4,13 +4,13 @@
     <div class="team-members">
       <div class="member">
         <img class="member-icon" src="@/assets/leader.png" />
-        <div class="leader">{{ teamLeader.Name }}</div>
-        <div class="leader-description">{{ teamLeader.Title }}</div>
+        <div class="leader">{{ teamLeader.name }}</div>
+        <div class="leader-description">{{ teamLeader.title }}</div>
       </div>
-      <div v-for="teamMember in teamMembers" :key="teamMember.link" class="member">
+      <div v-for="teamMember in teamMembers" :key="teamMember" class="member">
         <img class="member-icon" src="@/assets/person.png" />
-        <div>{{ teamMember.Name }}</div>
-        <div class="leader-description">{{ teamMember.Title }}</div>
+        <div>{{ teamMember.name }}</div>
+        <div class="leader-description">{{ teamMember.title }}</div>
       </div>
     </div>
   </div>
