@@ -111,5 +111,30 @@ namespace Tipalti.TheWho.Dal.Elastic
                 Id = x.Id, Name = x.Name
             });*/
         }
+
+        public List<ServiceDocument> GetResourceServiceByName(string serviceName)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<TeamConfigurationDocument> GetTeamConfiguartion()
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<string> GetDomains()
+        {
+            throw new NotImplementedException();
+        }
+
+        public SpacesDocument GetSpaces()
+        {
+            throw new NotImplementedException();
+        }
+
+        public TeamDocument GetTeamConfiguartion(int domainId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

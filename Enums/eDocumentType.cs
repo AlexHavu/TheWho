@@ -1,6 +1,6 @@
 ﻿namespace Tipalti.TheWho.Enums
 {
-    enum eDocumentType
+   public enum eDocumentType
     {
         ConfluenceRecourse = 1,
         JiraRecourse = 2,
