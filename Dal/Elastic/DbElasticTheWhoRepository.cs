@@ -104,22 +104,13 @@ namespace Tipalti.TheWho.Dal.Elastic
             );
         }
 
-        public Dictionary<string, Tipalti.TheWho.Models.TeamDocument> GetTeams()
+        public Dictionary<string, TeamConfigurationDocument> GetTeams()
         {
-            ISearchResponse<TeamDocumentConfiguration> searchResult = _elasticSearchClient.Search<TeamDocumentConfiguration>(s => s
-                            .Index(GetIndexName(typeof(TeamDocumentConfiguration)))
+            ISearchResponse<TeamConfigurationDocument> searchResult = _elasticSearchClient.Search<TeamConfigurationDocument>(s => s
+                            .Index(GetIndexName(typeof(TeamConfigurationDocument)))
                             .Query(q => q)
                         );
-            return searchResult?.Documents?.ToDictionary(x => x.TeamName,
-                x => new Tipalti.TheWho.Models.TeamDocument()
-                {
-                    Name = x.TeamName
-                });
-
-            /*return searchResult?.Documents?.ToDictionary(x => x.Name, 
-                x => new Tipalti.TheWho.Models.TeamDocument() {
-                Id = x.Id, Name = x.Name
-            });*/
+            return searchResult?.Documents?.ToDictionary(x => x.TeamName);
         }
 
         public List<ServiceDocument> GetResourceServiceByName(string serviceName)

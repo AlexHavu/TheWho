@@ -18,8 +18,25 @@ namespace Tipalti.TheWho.Services
 
         public List<string> GetTeamNames()
         {
-            Dictionary<string, TeamDocument> teams = _esRepository.GetTeams();
+            Dictionary<string, TeamConfigurationModel> teams = GetTeamsConfiguration();
             return new List<string>(teams.Keys);
+        }
+
+        public Dictionary<string, TeamConfigurationModel> GetTeamsConfiguration()
+        {
+            Dictionary<string, TeamConfigurationModel> result = new Dictionary<string, TeamConfigurationModel>();
+            foreach (var item in _esRepository.GetTeams().Values)
+            {
+                result.Add(item.TeamName, new TeamConfigurationModel()
+                {
+                    Domains = item.Domains,
+                    JiraBoardId = item.JiraBoardId,
+                    TeamLeaderId = item.TeamLeaderId,
+                    TeamName = item.TeamName
+                });
+            }
+
+            return result;
         }
     }
 }
