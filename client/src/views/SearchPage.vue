@@ -41,6 +41,7 @@ export default {
     },
     async handleSearch({ searchValue }) {
       this.searchResult = await this.search(searchValue);
+      console.log(this.searchResult);
     },
     ...mapActions({
       search: 'search',

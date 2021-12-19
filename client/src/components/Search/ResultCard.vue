@@ -53,10 +53,10 @@ export default {
     },
     getOwnerText() {
       if (this.data.documentType === 3) {
-        return `Manger: ${this.data.teamLeader.name}`;
+        return `Manger: ${this.data.teamLeader?.name}`;
       }
       if (this.data.documentType === 4) {
-        return `Owner: ${this.data.owner.name}`;
+        return `Owner: ${this.data.owner?.name}`;
       }
       return '';
     },
