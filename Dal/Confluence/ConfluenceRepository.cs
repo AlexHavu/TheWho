@@ -82,8 +82,7 @@ namespace Tipalti.TheWho.Dal.Confluence
 
         private async Task<Result<Response>> GetPages(string spacesExpression, string textExpression, int start)
         {
-            string path = @$"{_confluenceConfiguration.BaseUrl}{ConfluenceRestPath}{GetContentSearchApi}?cql=type=page and {spacesExpression} and {textExpression}&expand=body.view&limit={PageSize}&start={start}";
-
+            string path = @$"{_confluenceConfiguration.BaseUrl}{ConfluenceRestPath}{GetContentSearchApi}?cql=type=page and {spacesExpression} and ({textExpression})&expand=body.view&limit={PageSize}&start={start}";
             try
             {
                 HttpResponseMessage response = await _client.GetAsync(path);
