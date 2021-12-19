@@ -6,7 +6,6 @@ using Tipalti.TheWho.Dal.Elastic;
 using Tipalti.TheWho.Dal.Elastic.Documents;
 using Tipalti.TheWho.Dal.Jira;
 using Tipalti.TheWho.Enums;
-using Tipalti.TheWho.Models;
 using Tipalti.TheWho.Models.Jira;
 using Tipalti.TheWho.Models.Jira.RestApiResponse;
 using Tipalti.Utils.Result;
@@ -66,8 +65,7 @@ namespace Tipalti.TheWho.Indexers
 
         private ResourceDocument ConvertToModel(IssuesResult issuesResult)
         {
-            return new ResourceDocument
-            {
+            return new ResourceDocument { 
                 Id = issuesResult.Id,
                 RecourseType = (int)eRecourseType.Jira,
                 Content = issuesResult.Fields.Description,

@@ -125,59 +125,39 @@ namespace Tipalti.TheWho.Dal.Confluence
                     {
                         owner = owner.Substring(0, owner.IndexOf("("));                                                
                     }
-                    string teamFromList = _teamNames.Where(x => owner.Contains(x)).FirstOrDefault();
-                    return teamFromList ?? owner;
 
+                    /*foreach (string teamName in _teamNames)
+                    {
+                        if (owner.Contains(teamName))
+                        {
+                            return teamName;
+                        }
+                    }*/
+                    return _teamNames.Where(x => owner.Contains(x)).FirstOrDefault();                    
                 }
             }
+
             return string.Empty;
         }
 
-        private string getDescriptionFromBody(string bodyHtml)
-        {
-            var doc = new HtmlDocument();
-            doc.LoadHtml(bodyHtml);
-
-            var htmlNode = doc.DocumentNode.SelectSingleNode("//strong[text()='Description: ']");
-            if (htmlNode != null)
-            {
-                string desc = htmlNode.ParentNode.NextSibling.InnerHtml;
-                if (!desc.Contains("<")) // filter out if we are holding an element
-                {
-                    return desc;
-                }
-            }
-            return string.Empty;
-        }
-
-        private async Task<string> GetServiceOwner(ChildPageModel page)
+        private async Task<string> GetService(ChildPageModel page)
         {
             string path = @$"{_confluenceConfiguration.BaseUrl}{ConfluenceRestPath}{GetContentApi}/{page.Id}?{ExpandBodyQueryParam}";
-            
+            //string path = $"https://confluence.tipalti.com:8090/rest/api/content/{page.Id}?expand=body.view";
             HttpResponseMessage response = await _client.GetAsync(path);
             if (response.IsSuccessStatusCode)
             {
+                string ownerTeam = null;
                 PageModel result = JsonConvert.DeserializeObject<PageModel>(await response.Content.ReadAsStringAsync());
                 if (!result.Title.Contains("Template"))
                 {
-                    return getTeamFromBody(result.Body.View.Value);
+                    ownerTeam = getTeamFromBody(result.Body.View.Value);
                 }
-            }
-            return null;
-        }
 
-        private async Task<string> GetServiceDescription(ChildPageModel page)
-        {
-            string path = @$"{_confluenceConfiguration.BaseUrl}{ConfluenceRestPath}{GetContentApi}/{page.Id}?{ExpandBodyQueryParam}";
-
-            HttpResponseMessage response = await _client.GetAsync(path);
-            if (response.IsSuccessStatusCode)
-            {   
-                PageModel result = JsonConvert.DeserializeObject<PageModel>(await response.Content.ReadAsStringAsync());
-                if (!result.Title.Contains("Template"))
-                {   
-                    return getDescriptionFromBody(result.Body.View.Value);
-                }
+                if (!String.IsNullOrEmpty(ownerTeam))
+                {                    
+                    return ownerTeam;                    
+                }                
             }
             return null;
         }
@@ -185,7 +165,7 @@ namespace Tipalti.TheWho.Dal.Confluence
         private async Task<IEnumerable<ServiceDocument>> GetServices(string servicesRootId)
         {            
             string path = @$"{_confluenceConfiguration.BaseUrl}{ConfluenceRestPath}{GetContentApi}/{servicesRootId}/{GetChildPages}";
-            
+            //string path = $"https://confluence.tipalti.com:8090/rest/api/content/{servicesRootId}/child/page";
             var results = new List<ServiceDocument>();
             HttpResponseMessage response = await _client.GetAsync(path);
             if (response.IsSuccessStatusCode)
@@ -194,16 +174,14 @@ namespace Tipalti.TheWho.Dal.Confluence
 
                 foreach (ChildPageModel item in result.results)
                 {
-                    string owner = await GetServiceOwner(item);
-                    string description = await GetServiceDescription(item);
+                    string owner = await GetService(item);
                     if (!String.IsNullOrEmpty(owner))
                     {
                         results.Add(new ServiceDocument()
                         {
                             Name = item.Title,
                             Id = item.Id,
-                            Owner = owner,
-                            Description = description
+                            Owner = owner
                         });
                     }
                 }                

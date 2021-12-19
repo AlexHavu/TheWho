@@ -31,14 +31,15 @@ namespace Tipalti.TheWho.Services
                 allResults.Add(BuildTeamModel(isTeam, myDomains));
                 foreach (var domain in myDomains)
                 {
-                    List<Models.AllResult> resourceDocumentResult = GetResources(search);
+                    List<Models.AllResult> resourceDocumentResult = GetResources(domain);
                     allResults.AddRange(resourceDocumentResult);
                 }
             }
 
             else if (domains.Contains(search))
             {
-                GetTeamByDomain(search, teamConfig);
+                allResults.Add(GetTeamByDomain(search, teamConfig));
+                allResults.AddRange(GetResources(search));
 
             }
             return allResults;
@@ -46,27 +47,27 @@ namespace Tipalti.TheWho.Services
 
         private AllResult BuildTeamModel(TeamDocument dbTeam, List<string> domains)
         {
-            //var services = _elasticDB.GetServiceByOwner(dbTeam.TeamName);
+            var services = _elasticDB.GetServiceByOwner(dbTeam.TeamName);
             AllResult teamDocumentResult = new AllResult
             {
                 DocumentType = eDocumentType.Team,
                 Confluence = dbTeam.Confluence,
                 Name = dbTeam.TeamName,
                 Slack = dbTeam.Slack,
-                // Services = services.Select(s => s.Name).ToList(),
-                //TeamLeader = new Models.TeamMemberModel
-                //{
-                //    Name = dbTeam.TeamLeader.Name,
-                //    Title = dbTeam.TeamLeader.Title,
-                //    Image = dbTeam.TeamLeader.Image
-                //},
-                // TeamMembers = dbTeam.TeamMembers.Select(tm=>
-                // new Models.TeamMemberModel
-                // {
-                //     Name = dbTeam.TeamLeader.Name,
-                //     Title = dbTeam.TeamLeader.Title,
-                //     Image = dbTeam.TeamLeader.Image
-                // }).ToList(),
+                Services = services.Select(s => s.Name).ToList(),
+                TeamLeader = new Models.TeamMemberModel
+                {
+                    Name = dbTeam.TeamLeader.Name,
+                    Title = dbTeam.TeamLeader.Title,
+                    Image = dbTeam.TeamLeader.Image
+                },
+                TeamMembers = dbTeam.TeamMembers.Select(tm =>
+                new Models.TeamMemberModel
+                {
+                    Name = tm.Name,
+                    Title = tm.Title,
+                    Image = tm.Image
+                }).ToList(),
                 Domains = domains
             };
             return teamDocumentResult;
@@ -108,7 +109,7 @@ namespace Tipalti.TheWho.Services
             List<Models.AllResult> searchRsult = resourceModel.Select(res =>
             new Models.AllResult
             {
-                DocumentType = res.RecourseType == 1 ? eDocumentType.JiraRecourse : eDocumentType.Confluence,
+                DocumentType = res.RecourseType == 1 ? eDocumentType.JiraRecourse : eDocumentType.ConfluenceRecourse,
                 Domains = new List<string>(),
                 Id = res.Id,
                 Link = res.Link,
@@ -116,7 +117,12 @@ namespace Tipalti.TheWho.Services
             }
             ).ToList();
 
-            return searchRsult;
+            List<Models.AllResult> jira = searchRsult.Where(r => r.DocumentType == eDocumentType.JiraRecourse).Take(5).ToList();
+            List<Models.AllResult> Con = searchRsult.Where(r => r.DocumentType == eDocumentType.ConfluenceRecourse).Take(5).ToList();
+            jira.AddRange(Con);
+
+
+            return jira;
         }
 
         private void CreateTeamConfigurationIndex()

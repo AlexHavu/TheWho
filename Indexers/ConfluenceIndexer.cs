@@ -27,7 +27,7 @@ namespace Tipalti.TheWho.Indexers
             {
                 List<string> domains = _dbElasticTheWhoRepository.GetDomains();
                 List<string> spaces = _dbElasticTheWhoRepository.GetSpacesKeys();
-                Result<IEnumerable<ResourceDocument>> result = await _confluenceRepository.GetPagesAsync(spaces, domains);
+                Result<IEnumerable<ResourceDocumentResult>> result = await _confluenceRepository.GetPagesAsync(spaces, domains);
                 if(!result.WasOperationSuccessful)
                 {
                     return Result.CreateFailResult(result.FailureReason);
