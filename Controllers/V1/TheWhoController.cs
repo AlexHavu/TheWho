@@ -5,7 +5,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Swashbuckle.AspNetCore.Annotations;
+using Tipalti.TheWho.Dal.Elastic;
 using Tipalti.TheWho.Logger;
+using Tipalti.TheWho.Models;
 using Tipalti.TheWho.Services;
 
 namespace Tipalti.TheWho.Controllers.V1
@@ -19,6 +21,7 @@ namespace Tipalti.TheWho.Controllers.V1
     {
         private SearchService _searchService;
         private readonly ILogger _logger;
+        private readonly IDbElasticTheWhoRepository _esRepo;
 
         //this list is only for demonstrating CRUD methods and how to document API
         private static readonly List<int> Values = new List<int>
@@ -26,10 +29,12 @@ namespace Tipalti.TheWho.Controllers.V1
             1,3,5,8,10
         };
 
-        public TheWhoController(ILogger<ITheWhoLogger> logger, ISearchService searchService)
+        public TheWhoController(ILogger<ITheWhoLogger> logger, ISearchService searchService,
+            IDbElasticTheWhoRepository repo)
         {
             _searchService = (SearchService)searchService;
             _logger = logger;
+            _esRepo = repo;
         }
 
         /// <summary>
@@ -44,6 +49,20 @@ namespace Tipalti.TheWho.Controllers.V1
             _logger.LogDebug("Values - Get all");
             return await Task.FromResult(Values);
 
+        }
+
+        /// <summary>
+        /// Get Teams
+        /// </summary>
+        /// <response code="200">List of all values</response>
+        /// <returns>A list of Teams</returns> 
+        [HttpGet("GetTeamNames")]
+        [ProducesResponseType(typeof(List<string>), StatusCodes.Status200OK)]
+        public List<string> GetTeamsNames()
+        {
+            _logger.LogDebug("Values - Get team names");
+            Dictionary<string, TeamDocument> teams = _esRepo.GetTeams();            
+            return new List<string>(teams.Keys);
         }
 
         /// <summary>

@@ -15,6 +15,12 @@ namespace Tipalti.TheWho.Dal.Elastic.Documents
         public List<TeamMemberModel> TeamMembers { get; set; }
     }
 
+    [IndexName("the-who-team_configuration")]
+    public class TeamDocumentConfiguration
+    {   
+        public string TeamName { get; set; }        
+    }
+
     public class TeamMemberModel
     {
         public string Name { get; set; }
