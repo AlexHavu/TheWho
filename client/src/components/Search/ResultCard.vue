@@ -4,7 +4,7 @@
       <img class="icon" src="@/assets/jira.png" v-if="isJira"/>
       <img class="icon" src="@/assets/confluence.png" v-if="isConfluence"/>
       <folder-icon class="icon" v-if="!isTeam && !isService && !isConfluence && !isJira"/>
-      <acount-group-icon class="icon" v-if="isTeam"/>
+      <img class="icon" src="@/assets/team.png" v-if="isTeam"/>
       <div class="team-user-info">
             <h2 class="title">{{getTitle}}</h2>
             <p>{{getOwnerText}}</p>
@@ -24,7 +24,6 @@
 </template>
 
 <script>
-import AcountGroupIcon from 'vue-material-design-icons/AccountGroup.vue';
 import LanIcon from 'vue-material-design-icons/Lan.vue';
 import FolderIcon from 'vue-material-design-icons/Folder.vue';
 import ArrowRightIcon from 'vue-material-design-icons/ArrowRight.vue';
@@ -34,7 +33,6 @@ export default {
   components: {
     LanIcon,
     FolderIcon,
-    AcountGroupIcon,
     ArrowRightIcon,
   },
   props: {

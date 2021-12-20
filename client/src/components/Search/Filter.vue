@@ -2,10 +2,17 @@
   <div class="filter-selection">
       <h1 class="title">Filter By</h1>
       <v-btn class="card" elevation="2" outlined @click="handleClick(3)">
-        <img class="icon" src="@/assets/jira.png">Team</v-btn>
-      <v-btn class="card" elevation="2" outlined  @click="handleClick(4)">Service</v-btn>
-      <v-btn class="card" elevation="2" outlined @click="handleClick(2)">Jira</v-btn>
-      <v-btn class="card" elevation="2" outlined @click="handleClick(1)">Confluence </v-btn>
+        <img class="icon" src="@/assets/team.png">Team</v-btn>
+        <v-btn class="card" elevation="2" outlined @click="handleClick(4)">
+        <img class="icon" src="@/assets/service.png">Service</v-btn>
+        <v-btn class="card" elevation="2" outlined @click="handleClick(2)">
+        <img class="icon" src="@/assets/jira.png">Jira</v-btn>
+        <v-btn class="card" elevation="2" outlined @click="handleClick(1)">
+        <img class="icon" src="@/assets/confluence.png">Confluence</v-btn>
+        <v-btn class="card" elevation="2" outlined @click="handleClick(1)">
+        <img class="icon" src="@/assets/kibana.png">Kibana</v-btn>
+        <v-btn class="card" elevation="2" outlined @click="handleClick(1)">
+        <img class="icon" src="@/assets/grafana.png">Grafana</v-btn>
 
   </div>
 </template>
@@ -53,5 +60,10 @@ export default {
     width: 60%;
     height: 5%;
     margin-top: 2%;
+}
+.icon{
+  width: 25px;
+  height: 25px;
+  margin-right: 5px;
 }
 </style>
