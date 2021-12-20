@@ -49,6 +49,7 @@ export default {
       this.searchResult = this.allSearchResult.filter((x) => x.documentType === type);
     },
     async handleSearch({ searchValue }) {
+      this.searchResult = [];
       this.isLoad = true;
       this.searchResult = await this.search(searchValue);
       this.allSearchResult = this.searchResult;
