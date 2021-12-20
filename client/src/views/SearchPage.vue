@@ -39,7 +39,7 @@ export default {
   },
   data() {
     return {
-      allSearchResult: search,
+      allSearchResult: [],
       searchResult: [],
       documentTypes: [],
       isLoad: false,
@@ -52,6 +52,7 @@ export default {
     async handleSearch({ searchValue }) {
       this.isLoad = true;
       this.searchResult = await this.search(searchValue);
+      this.allSearchResult = searchResult;
       console.log(this.searchResult);
       this.isLoad = false;
     },
