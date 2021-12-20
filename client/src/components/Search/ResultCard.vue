@@ -1,8 +1,10 @@
 <template>
-  <v-card class="card" elevation="2" outlined>
+  <v-card class="card" elevation="2" outlined @click="handleClick">
       <lan-icon class="icon" v-if="isService"/>
-      <folder-icon class="icon" v-if="!isTeam && !isService"/>
-      <acount-group-icon class="icon" v-if="isTeam"/>
+      <img class="icon" src="@/assets/jira.png" v-if="isJira"/>
+      <img class="icon" src="@/assets/confluence.png" v-if="isConfluence"/>
+      <folder-icon class="icon" v-if="!isTeam && !isService && !isConfluence && !isJira"/>
+      <img class="icon" src="@/assets/team.png" v-if="isTeam"/>
       <div class="team-user-info">
             <h2 class="title">{{getTitle}}</h2>
             <p>{{getOwnerText}}</p>
@@ -14,7 +16,6 @@
           <v-btn
           v-if="!isService"
           icon
-          @click="handleClick"
           >
           <arrow-right-icon/>
           </v-btn>
@@ -23,7 +24,6 @@
 </template>
 
 <script>
-import AcountGroupIcon from 'vue-material-design-icons/AccountGroup.vue';
 import LanIcon from 'vue-material-design-icons/Lan.vue';
 import FolderIcon from 'vue-material-design-icons/Folder.vue';
 import ArrowRightIcon from 'vue-material-design-icons/ArrowRight.vue';
@@ -33,7 +33,6 @@ export default {
   components: {
     LanIcon,
     FolderIcon,
-    AcountGroupIcon,
     ArrowRightIcon,
   },
   props: {
@@ -71,6 +70,12 @@ export default {
     },
     isService() {
       return this.data.documentType === 4;
+    },
+    isConfluence() {
+      return this.data.documentType === 1;
+    },
+    isJira() {
+      return this.data.documentType === 2;
     },
   },
   methods: {
@@ -110,6 +115,7 @@ export default {
 .title{
     margin-top:10%;
     color: rgb(69, 94, 163);
+    width: 1500px;
 }
 .button-panel{
     display: flex;
@@ -125,5 +131,11 @@ export default {
     height: 60%;
     display: flex;
     align-items: center;
+    font-size: 1em;
+}
+
+.icon {
+  width: 40px;
+  height: 40px;
 }
 </style>
