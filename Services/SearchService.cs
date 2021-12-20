@@ -31,14 +31,15 @@ namespace Tipalti.TheWho.Services
                 allResults.Add(BuildTeamModel(isTeam, myDomains));
                 foreach (var domain in myDomains)
                 {
-                    List<Models.AllResult> resourceDocumentResult = GetResources(search);
+                    List<Models.AllResult> resourceDocumentResult = GetResources(domain);
                     allResults.AddRange(resourceDocumentResult);
                 }
             }
 
             else if (domains.Contains(search))
             {
-                GetTeamByDomain(search, teamConfig);
+                allResults.Add(GetTeamByDomain(search, teamConfig));
+                allResults.AddRange(GetResources(search));
 
             }
             return allResults;
@@ -46,27 +47,28 @@ namespace Tipalti.TheWho.Services
 
         private AllResult BuildTeamModel(TeamDocument dbTeam, List<string> domains)
         {
-            //var services = _elasticDB.GetServiceByOwner(dbTeam.TeamName);
+            var services = _elasticDB.GetServiceByOwner(dbTeam.TeamName);
             AllResult teamDocumentResult = new AllResult
             {
                 DocumentType = eDocumentType.Team,
                 Confluence = dbTeam.Confluence,
+                Jira = dbTeam.Jira,
                 Name = dbTeam.TeamName,
                 Slack = dbTeam.Slack,
-                // Services = services.Select(s => s.Name).ToList(),
-                //TeamLeader = new Models.TeamMemberModel
-                //{
-                //    Name = dbTeam.TeamLeader.Name,
-                //    Title = dbTeam.TeamLeader.Title,
-                //    Image = dbTeam.TeamLeader.Image
-                //},
-                // TeamMembers = dbTeam.TeamMembers.Select(tm=>
-                // new Models.TeamMemberModel
-                // {
-                //     Name = dbTeam.TeamLeader.Name,
-                //     Title = dbTeam.TeamLeader.Title,
-                //     Image = dbTeam.TeamLeader.Image
-                // }).ToList(),
+                Services = services.Select(s => s.Name).ToList(),
+                TeamLeader = new Models.TeamMemberModel
+                {
+                    Name = dbTeam.TeamLeader.Name,
+                    Title = dbTeam.TeamLeader.Title,
+                    Image = dbTeam.TeamLeader.Image
+                },
+                TeamMembers = dbTeam.TeamMembers.Select(tm =>
+                new Models.TeamMemberModel
+                {
+                    Name = tm.Name,
+                    Title = tm.Title,
+                    Image = tm.Image
+                }).ToList(),
                 Domains = domains
             };
             return teamDocumentResult;
@@ -108,7 +110,7 @@ namespace Tipalti.TheWho.Services
             List<Models.AllResult> searchRsult = resourceModel.Select(res =>
             new Models.AllResult
             {
-                DocumentType = res.RecourseType == 1 ? eDocumentType.JiraRecourse : eDocumentType.Confluence,
+                DocumentType = res.RecourseType == 1 ? eDocumentType.JiraRecourse : eDocumentType.ConfluenceRecourse,
                 Domains = new List<string>(),
                 Id = res.Id,
                 Link = res.Link,
@@ -116,7 +118,54 @@ namespace Tipalti.TheWho.Services
             }
             ).ToList();
 
-            return searchRsult;
+            List<Models.AllResult> jira = searchRsult.Where(r => r.DocumentType == eDocumentType.JiraRecourse).Take(3).ToList();
+            List<Models.AllResult> Con = searchRsult.Where(r => r.DocumentType == eDocumentType.ConfluenceRecourse).Take(3).ToList();
+            jira.AddRange(Con);
+
+
+            return jira;
+        }
+
+        private void CreateTeamConfigurationIndex()
+        {
+            _elasticDB.DeleteIndex(DbElasticTheWhoRepository.GetIndexName(typeof(TeamConfigurationDocument)));
+            _elasticDB.CreateSimpleIndex<TeamConfigurationDocument>();
+
+            _elasticDB.BulkAddOrUpdate(GetTeamsConfigurationList());
+        }
+
+        private static List<TeamConfigurationDocument> GetTeamsConfigurationList()
+        {
+            var mercury = new TeamConfigurationDocument
+            {
+                TeamName = "Mercury",
+                TeamLeaderId = 124,
+                JiraBoardId = 86,
+                JiraBoardLink = "https://jira.tipalti.com:7000/secure/RapidBoard.jspa?rapidView=86",
+                TeamSpace = "https://confluence.tipalti.com:8090/display/BM/Bills+-+Mercury",
+                Domains = new List<string> { "OCR", "Mail Collection", "Coding" }
+            };
+
+            var timtam = new TeamConfigurationDocument
+            {
+                TeamName = "TimTam",
+                TeamLeaderId = 125,
+                JiraBoardId = 33,
+                Domains = new List<string> { "MultiFx", "Esrthport", "NetNow" },
+                JiraBoardLink = "https://jira.tipalti.com:7000/secure/RapidBoard.jspa?rapidView=33",
+                TeamSpace = "https://confluence.tipalti.com:8090/display/TT/Team+TimTam (edited) "
+            };
+            var contigos = new TeamConfigurationDocument
+            {
+                TeamName = "Contigos",
+                TeamLeaderId = 123,
+                JiraBoardId = 71,
+                JiraBoardLink = "https://jira.tipalti.com:7000/secure/RapidBoard.jspa?rapidView=71",
+                Domains = new List<string> { "Approval" },
+                TeamSpace = "https://confluence.tipalti.com:8090/display/BTY/Bills+-+Contigos"
+            };
+
+            return new List<TeamConfigurationDocument> { mercury, contigos, timtam };
         }
 
 

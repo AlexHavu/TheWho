@@ -54,7 +54,7 @@ export default {
   align-items: center;
   display: flex;
   flex-direction: column;
-  width: 120px;
+  width: 200px;
   height: 70px;
 }
 
