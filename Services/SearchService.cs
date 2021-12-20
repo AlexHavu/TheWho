@@ -139,12 +139,27 @@ namespace Tipalti.TheWho.Services
             }
             ).ToList();
 
+            List<AllResult> allll = new List<AllResult>();
             List<Models.AllResult> jira = searchRsult.Where(r => r.DocumentType == eDocumentType.JiraRecourse).Take(10).ToList();
             List<Models.AllResult> Con = searchRsult.Where(r => r.DocumentType == eDocumentType.ConfluenceRecourse).Take(10).ToList();
+            allll.Add(jira[0]);
+            allll.Add(Con[0]);
+            allll.Add(jira[1]);
+            allll.Add(jira[2]);
+            allll.Add(Con[1]);
+
+
+            allll.Add(Con[2]);
+            allll.Add(Con[0]);
+            allll.Add(jira[3]);
+            allll.Add(jira[4]);
+            allll.Add(Con[3]);
+
+
             jira.AddRange(Con);
 
 
-            return jira;
+            return allll;
         }
 
         private void CreateTeamConfigurationIndex()
