@@ -9,6 +9,15 @@
         </div>
         <div class="results">
           <result-card v-for="result in searchResult" :key="result.id" :data="result"></result-card>
+          <v-progress-circular
+          class="loader"
+          v-if="isLoad"
+          :size="70"
+          :width="7"
+          color="blue"
+          indeterminate
+          >
+          </v-progress-circular>
         </div>
       </div>
   </div>
@@ -30,9 +39,10 @@ export default {
   },
   data() {
     return {
-      allSearchResult: search,
+      allSearchResult: [],
       searchResult: [],
       documentTypes: [],
+      isLoad: false,
     };
   },
   methods: {
@@ -40,8 +50,11 @@ export default {
       this.searchResult = this.allSearchResult.filter((x) => x.documentType === type);
     },
     async handleSearch({ searchValue }) {
+      this.isLoad = true;
       this.searchResult = await this.search(searchValue);
+      this.allSearchResult = searchResult;
       console.log(this.searchResult);
+      this.isLoad = false;
     },
     ...mapActions({
       search: 'search',
@@ -89,5 +102,8 @@ export default {
     flex-direction: column;
     align-items: center;
     overflow-y: auto;
+  }
+  .loader{
+    margin-top: 20%;
   }
 </style>
