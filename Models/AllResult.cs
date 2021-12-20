@@ -24,6 +24,11 @@ namespace Tipalti.TheWho.Models
         public string Slack { get; set; }
         public TeamMemberModel TeamLeader { get; set; }
         public List<TeamMemberModel> TeamMembers { get; set; }
+        public string Owner { get; set; }
+        public string Description { get; set; }
+
+
+
 
     }
 }

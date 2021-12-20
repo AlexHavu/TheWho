@@ -20,5 +20,6 @@ namespace Tipalti.TheWho.Dal.Elastic
         public void DeleteIndex(string indexName);
         public void CreateSimpleIndex<TDocument>() where TDocument : class;
         public void CreateTeamIndex();
+        public List<ServiceDocument> GetServiceByDomain(string domain);
     }
 }

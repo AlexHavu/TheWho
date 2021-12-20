@@ -65,6 +65,18 @@ namespace Tipalti.TheWho.Dal.Elastic
             return searchResults?.Documents?.ToList();
         }
 
+        public List<ServiceDocument> GetServiceByDomain(string domain)
+        {
+            return GetAllDocuments<ServiceDocument>().Where(x => x.Name.Contains(domain)).ToList();
+            //var searchResults = _elasticSearchClient.Search<ServiceDocument>(s => s
+            //     .Index(GetIndexName(typeof(ServiceDocument)))
+            //     .Query(q => q.Prefix(c=>c.Value(domain)))
+            //     .From(0)
+            //     .Size(500)
+            // );
+            // return searchResults?.Documents?.ToList();
+        }
+
         public void DeleteDocument<TDocument>(Id id) where TDocument : class
         {
             _elasticSearchClient.Delete<TDocument>(id);

@@ -28,7 +28,6 @@ import { mapActions } from 'vuex';
 import SearchField from '@/components/Search/SearchField.vue';
 import ResultCard from '@/components/Search/ResultCard.vue';
 import FilterResults from '@/components/Search/Filter.vue';
-import search from '@/assets/search.json';
 
 export default {
   name: 'SearchPage',
@@ -52,7 +51,7 @@ export default {
     async handleSearch({ searchValue }) {
       this.isLoad = true;
       this.searchResult = await this.search(searchValue);
-      this.allSearchResult = searchResult;
+      this.allSearchResult = this.searchResult;
       console.log(this.searchResult);
       this.isLoad = false;
     },

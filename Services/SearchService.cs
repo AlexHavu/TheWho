@@ -38,11 +38,32 @@ namespace Tipalti.TheWho.Services
 
             else if (domains.Contains(search))
             {
+                List<ServiceDocument> domainsServices = _elasticDB.GetServiceByDomain(search);
                 allResults.Add(GetTeamByDomain(search, teamConfig));
                 allResults.AddRange(GetResources(search));
+                allResults.AddRange(BuildService(domainsServices));
+
 
             }
             return allResults;
+        }
+
+        private List<AllResult> BuildService(List<ServiceDocument> dbServices)
+        {
+
+            List<Models.AllResult> searchRsult = dbServices.Select(res =>
+                new Models.AllResult
+                {
+                    DocumentType = eDocumentType.Service,
+                    Id = res.Id,
+                    Name = res.Name,
+                   Description = res.Description,
+                   Owner = res.Owner
+                }
+            ).ToList();
+
+            return searchRsult;
+
         }
 
         private AllResult BuildTeamModel(TeamDocument dbTeam, List<string> domains)
@@ -118,8 +139,8 @@ namespace Tipalti.TheWho.Services
             }
             ).ToList();
 
-            List<Models.AllResult> jira = searchRsult.Where(r => r.DocumentType == eDocumentType.JiraRecourse).Take(3).ToList();
-            List<Models.AllResult> Con = searchRsult.Where(r => r.DocumentType == eDocumentType.ConfluenceRecourse).Take(3).ToList();
+            List<Models.AllResult> jira = searchRsult.Where(r => r.DocumentType == eDocumentType.JiraRecourse).Take(10).ToList();
+            List<Models.AllResult> Con = searchRsult.Where(r => r.DocumentType == eDocumentType.ConfluenceRecourse).Take(10).ToList();
             jira.AddRange(Con);
 
 
